@@ -8,6 +8,7 @@ import 'package:fl_clash/pages/home.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/about.dart';
 import 'package:fl_clash/views/navigation.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -15,8 +16,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../helpers/glyph_finders.dart';
 import '../helpers/test_app.dart';
 
 const _mobileSize = Size(400, 800);
@@ -43,8 +46,40 @@ Widget _page(String title, {IconButtonData? primaryAction}) {
   );
 }
 
+List<NavigationItem> _navigationItems({bool withProxies = false}) => [
+  NavigationItem(
+    glyph: AppGlyphs.dashboard,
+    label: PageLabel.dashboard,
+    builder: (_) => _page('dashboard'),
+  ),
+  if (withProxies)
+    NavigationItem(
+      glyph: AppGlyphs.proxies,
+      label: PageLabel.proxies,
+      builder: (_) => _page('proxies'),
+    ),
+  NavigationItem(
+    glyph: AppGlyphs.profiles,
+    label: PageLabel.profiles,
+    builder: (_) => _page('profiles', primaryAction: _addAction()),
+  ),
+  NavigationItem(
+    glyph: AppGlyphs.tools,
+    label: PageLabel.tools,
+    builder: (_) => _page('tools'),
+  ),
+];
+
+Finder _dockAction(String tooltip) => find.descendant(
+  of: find.byType(NavigationDock),
+  matching: find.byTooltip(tooltip),
+);
+
 Future<ProviderContainer> _pumpHome(
   WidgetTester tester, {
+  bool withProxies = false,
+  bool hasProfile = true,
+  bool suspended = false,
   List<Override> overrides = const [],
   bool settle = true,
 }) async {
@@ -54,30 +89,12 @@ Future<ProviderContainer> _pumpHome(
   final container = ProviderContainer(
     overrides: [
       profilesProvider.overrideWithValue([
-        const Profile(id: 1, autoUpdateDuration: Duration.zero),
+        if (hasProfile) const Profile(id: 1, autoUpdateDuration: Duration.zero),
       ]),
-      suspendProvider.overrideWithValue(false),
+      suspendProvider.overrideWithValue(suspended),
       ...overrides,
       navigationItemsStateProvider.overrideWithValue(
-        NavigationItemsState(
-          value: [
-            NavigationItem(
-              glyph: AppGlyphs.dashboard,
-              label: PageLabel.dashboard,
-              builder: (_) => _page('dashboard'),
-            ),
-            NavigationItem(
-              glyph: AppGlyphs.profiles,
-              label: PageLabel.profiles,
-              builder: (_) => _page('profiles', primaryAction: _addAction()),
-            ),
-            NavigationItem(
-              glyph: AppGlyphs.tools,
-              label: PageLabel.tools,
-              builder: (_) => _page('tools'),
-            ),
-          ],
-        ),
+        NavigationItemsState(value: _navigationItems(withProxies: withProxies)),
       ),
     ],
   );
@@ -118,18 +135,33 @@ Rect _painted(WidgetTester tester, RenderObject box, Rect resting) {
 }
 
 void main() {
+  setUpAll(() {
+    // AboutView reads globalState.packageInfo, which only the real app
+    // bootstrap populates.
+    globalState.packageInfo = PackageInfo(
+      appName: 'FlClash',
+      packageName: 'com.follow.clash',
+      version: '0.0.0',
+      buildNumber: '1',
+    );
+  });
+
   setUp(() {
     navigationPort = navigation;
     addTearDown(() => navigationPort = null);
   });
 
-  testWidgets('the dock stays centred alone on every page, the dashboard '
-      'included', (tester) async {
+  testWidgets('the dock stays centred on every page, the dashboard included', (
+    tester,
+  ) async {
     final container = await _pumpHome(tester);
 
     final bar = tester.getRect(find.byType(FloatingNavigationBar));
     expect(find.byType(FloatingActionButton), findsNothing);
-    expect(bar.center.dx, _mobileSize.width / 2);
+    final action = tester.getRect(_dockAction('Start'));
+    expect(action.left, greaterThan(bar.right));
+    expect((bar.left + action.right) / 2, _mobileSize.width / 2);
+    expect(action.width, moreOrLessEquals(bar.height));
 
     await tester.drag(
       find.byType(FloatingNavigationBar),
@@ -139,8 +171,175 @@ void main() {
     await tester.pumpAndSettle();
     expect(container.read(currentPageLabelProvider), PageLabel.tools);
     final alone = tester.getRect(find.byType(FloatingNavigationBar));
-    expect(alone.center.dx, _mobileSize.width / 2);
+    final about = tester.getRect(_dockAction('About'));
+    expect((alone.left + about.right) / 2, _mobileSize.width / 2);
     expect(alone.width, lessThan(_mobileSize.width - 40));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the dock action follows the current page', (tester) async {
+    final container = await _pumpHome(tester, withProxies: true);
+    const tooltips = {
+      PageLabel.dashboard: 'Start',
+      PageLabel.proxies: 'Delay test',
+      PageLabel.profiles: 'Add profile',
+      PageLabel.tools: 'About',
+    };
+    const glyphs = {
+      PageLabel.proxies: AppGlyphs.bolt,
+      PageLabel.profiles: AppGlyphs.addCircle,
+      PageLabel.tools: AppGlyphs.info,
+    };
+    for (final entry in tooltips.entries) {
+      container.read(currentPageLabelProvider.notifier).toPage(entry.key);
+      await tester.pumpAndSettle();
+      final action = _dockAction(entry.value);
+      expect(action, findsOneWidget, reason: entry.key.name);
+      expect(
+        find.descendant(of: action, matching: find.byType(GlyphIcon)),
+        findsOneWidget,
+        reason: entry.key.name,
+      );
+      if (glyphs[entry.key] case final glyph?) {
+        expect(
+          find.descendant(of: action, matching: find.byGlyph(glyph)),
+          findsOneWidget,
+          reason: entry.key.name,
+        );
+      }
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the dashboard action shows the start toggle state', (
+    tester,
+  ) async {
+    await _pumpHome(
+      tester,
+      overrides: [
+        runTimeProvider.overrideWithBuild(
+          (_, _) => DateTime.now().millisecondsSinceEpoch,
+        ),
+      ],
+    );
+    expect(_dockAction('Stop'), findsOneWidget);
+    expect(_dockAction('Start'), findsNothing);
+  });
+
+  testWidgets('the dashboard action shows the suspended state', (tester) async {
+    await _pumpHome(
+      tester,
+      suspended: true,
+      overrides: [
+        runTimeProvider.overrideWithBuild(
+          (_, _) => DateTime.now().millisecondsSinceEpoch,
+        ),
+      ],
+    );
+    final action = _dockAction('Suspended…');
+    expect(action, findsOneWidget);
+    expect(
+      find.descendant(of: action, matching: find.byGlyph(AppGlyphs.wifiOff)),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('the dashboard action needs a profile, as the card does', (
+    tester,
+  ) async {
+    await _pumpHome(tester, hasProfile: false);
+    expect(_dockAction('Start'), findsOneWidget);
+    expect(
+      tester
+          .widget<InkResponse>(
+            find.descendant(
+              of: _dockAction('Start'),
+              matching: find.byType(InkResponse),
+            ),
+          )
+          .onTap,
+      isNull,
+    );
+  });
+
+  testWidgets('a press on the tools action opens the About page', (
+    tester,
+  ) async {
+    final container = await _pumpHome(tester);
+    container.read(currentPageLabelProvider.notifier).toPage(PageLabel.tools);
+    await tester.pumpAndSettle();
+    await tester.tap(_dockAction('About'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AboutView), findsOneWidget);
+  });
+
+  testWidgets('the dock action presses, and stays quiet when disabled', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(560, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    var pressed = 0;
+
+    Widget dock({bool enabled = true, bool loading = false}) => TestApp(
+      child: Scaffold(
+        body: Align(
+          alignment: Alignment.bottomCenter,
+          child: NavigationDock(
+            destinations: const [
+              NavigationDockDestination(glyph: AppGlyphs.dashboard, label: 'a'),
+              NavigationDockDestination(glyph: AppGlyphs.profiles, label: 'b'),
+              NavigationDockDestination(glyph: AppGlyphs.tools, label: 'c'),
+            ],
+            selectedIndex: 0,
+            onSelected: (_) {},
+            action: NavigationDockAction(
+              glyph: AppGlyphs.bolt,
+              tooltip: 'Test action',
+              enabled: enabled,
+              loading: loading,
+              onPressed: () {
+                pressed++;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(dock());
+    await tester.pumpAndSettle();
+    final bar = tester.getRect(find.byType(FloatingNavigationBar));
+    final action = tester.getRect(find.byTooltip('Test action'));
+    expect(action.left, greaterThan(bar.right));
+    expect(action.width, moreOrLessEquals(action.height));
+    expect(action.height, moreOrLessEquals(bar.height));
+    expect((bar.left + action.right) / 2, 560 / 2);
+
+    await tester.tap(find.byTooltip('Test action'));
+    await tester.pumpAndSettle();
+    expect(pressed, 1);
+
+    await tester.pumpWidget(dock(enabled: false));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Test action'));
+    await tester.pumpAndSettle();
+    expect(pressed, 1);
+
+    await tester.pumpWidget(dock(loading: true));
+    await tester.pump();
+    expect(find.byType(CommonCircleLoading), findsOneWidget);
+    await tester.tap(find.byTooltip('Test action'));
+    await tester.pump();
+    expect(pressed, 1);
+
+    tester.view.physicalSize = const Size(320, 800);
+    await tester.pumpWidget(dock());
+    await tester.pumpAndSettle();
+    final narrow = tester.getRect(find.byType(FloatingNavigationBar));
+    final narrowAction = tester.getRect(find.byTooltip('Test action'));
+    expect(narrowAction.left, greaterThan(narrow.right));
+    expect(narrowAction.right, lessThan(300));
     expect(tester.takeException(), isNull);
   });
 

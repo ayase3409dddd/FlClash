@@ -2,8 +2,11 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/manager/app_manager.dart';
 import 'package:fl_clash/models/common.dart';
+import 'package:fl_clash/models/state.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/views/about.dart';
+import 'package:fl_clash/views/profiles/add.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
@@ -58,6 +61,103 @@ class _HomeShell extends ConsumerWidget {
     ref.read(currentPageLabelProvider.notifier).toPage(pageLabel);
   }
 
+  NavigationDockAction? _buildDockAction(
+    BuildContext context,
+    WidgetRef ref,
+    PageLabel pageLabel,
+  ) {
+    return switch (pageLabel) {
+      PageLabel.dashboard => _startAction(context, ref),
+      PageLabel.proxies => _proxiesAction(context, ref),
+      PageLabel.profiles => _profilesAction(context),
+      PageLabel.tools => _toolsAction(context),
+      _ => null,
+    };
+  }
+
+  NavigationDockAction _startAction(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final isStart = ref.watch(isStartProvider);
+    final suspended = isStart && ref.watch(suspendProvider);
+    final hasProfile = ref.watch(
+      profilesProvider.select((state) => state.isNotEmpty),
+    );
+    return NavigationDockAction(
+      glyph: suspended
+          ? AppGlyphs.wifiOff
+          : AppGlyphs.playPause(isStart ? 1 : 0),
+      tooltip: suspended
+          ? appLocalizations.suspended
+          : isStart
+          ? appLocalizations.stop
+          : appLocalizations.start,
+      enabled: hasProfile,
+      onPressed: () {
+        ref.read(commonActionProvider.notifier).toggleRunning();
+      },
+    );
+  }
+
+  /// The top bar's delay test opens in tab style only; the dock carries it on
+  /// the proxies page in either style, against the group that page would test.
+  NavigationDockAction _proxiesAction(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final groupName = ref.watch(
+      proxiesTabStateProvider.select(_currentGroupNameOf),
+    );
+    final testing = ref.watch(
+      delayTestingGroupsProvider.select((groups) => groups.contains(groupName)),
+    );
+    return NavigationDockAction(
+      glyph: AppGlyphs.bolt,
+      tooltip: appLocalizations.delayTest,
+      enabled: groupName != null && !testing,
+      loading: testing,
+      onPressed: () {
+        final name = _currentGroupNameOf(ref.read(proxiesTabStateProvider));
+        if (name == null) {
+          return;
+        }
+        ref.read(proxiesActionProvider.notifier).delayTestPageGroup(name);
+      },
+    );
+  }
+
+  NavigationDockAction _profilesAction(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return NavigationDockAction(
+      glyph: AppGlyphs.addCircle,
+      tooltip: appLocalizations.addProfile,
+      onPressed: () {
+        showAddProfilePage(context);
+      },
+    );
+  }
+
+  NavigationDockAction _toolsAction(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    return NavigationDockAction(
+      glyph: AppGlyphs.info,
+      tooltip: appLocalizations.about,
+      onPressed: () {
+        showAboutPage(context);
+      },
+    );
+  }
+
+  /// The group the proxies tab tests, falling back to the first shown group
+  /// before the profile has recorded one.
+  static String? _currentGroupNameOf(ProxiesTabState state) {
+    if (state.groups.isEmpty) {
+      return null;
+    }
+    final current = state.currentGroupName;
+    if (state.groups.any((group) => group.name == current)) {
+      return current;
+    }
+    return state.groups.first.name;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(navigationStateProvider);
@@ -66,6 +166,9 @@ class _HomeShell extends ConsumerWidget {
     final floating = ref.watch(
       appSettingProvider.select((state) => state.floatingNavigationBar),
     );
+    final action = isMobile && floating
+        ? _buildDockAction(context, ref, state.pageLabel)
+        : null;
     return Material(
       color: SurfaceLevel.page.colorOf(context.colorScheme),
       child: Column(
@@ -99,6 +202,7 @@ class _HomeShell extends ConsumerWidget {
                               label: item.label.label,
                             ),
                         ],
+                        action: action,
                         selectedIndex: state.currentIndex,
                         onSelected: (index) {
                           _handleToPage(navigationItems[index].label, ref);

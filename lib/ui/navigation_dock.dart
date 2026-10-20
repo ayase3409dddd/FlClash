@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:fl_clash/ui/color.dart';
 import 'package:fl_clash/ui/context.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
+import 'package:fl_clash/ui/loading.dart';
 import 'package:fl_clash/ui/shape.dart';
 import 'package:fl_clash/ui/surface.dart';
 import 'package:fl_clash/ui/typography.dart';
@@ -25,6 +27,7 @@ const double _hitSlop = 8;
 const double _maxItemExtent = 86;
 const double _minLensWidth = 84;
 const _fullWidthCount = 5;
+const double _actionGap = 10;
 const double _iconSize = 28;
 const double _labelGap = 2;
 const double _labelInset = 2;
@@ -283,6 +286,101 @@ class _DockSurface extends StatelessWidget {
   }
 }
 
+/// The page's action as a circle on the bar's own surface, as tall as the bar
+/// and swelling under a press as the bar does.
+class _DockActionButton extends StatefulWidget {
+  const _DockActionButton({required this.action, required this.diameter});
+
+  final NavigationDockAction action;
+  final double diameter;
+
+  @override
+  State<_DockActionButton> createState() => _DockActionButtonState();
+}
+
+class _DockActionButtonState extends State<_DockActionButton> {
+  final ValueNotifier<LiquidGlassGlow> _glow = ValueNotifier(
+    LiquidGlassGlow.none,
+  );
+
+  @override
+  void dispose() {
+    _glow.dispose();
+    super.dispose();
+  }
+
+  void _light(bool pressed) {
+    _glow.value = pressed
+        ? LiquidGlassGlow(
+            center: Offset(widget.diameter / 2, widget.diameter / 2),
+            reach: _glowReach,
+            strength: _glowPeak,
+            wash: _glowWash,
+          )
+        : LiquidGlassGlow.none;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final glass = LiquidGlassScope.of(context);
+    final ultra =
+        LiquidGlassScope.qualityOf(context) == LiquidGlassQuality.ultra;
+    final action = widget.action;
+    final enabled = action.enabled && !action.loading;
+    // A spinner has to stay visible while the button waits, so it keeps the
+    // primary tint the disabled state would drop.
+    final foreground = action.enabled || action.loading
+        ? colorScheme.primary
+        : colorScheme.onSurfaceVariant.opacity38;
+    final icon = action.loading
+        ? CommonCircleLoading(size: _iconSize, color: foreground)
+        : GlyphIcon(action.glyph, size: _iconSize, color: foreground, fill: 1);
+    return Tooltip(
+      message: action.tooltip,
+      child: ElasticPress(
+        enabled: enabled,
+        child: _DockSurface(
+          glass: glass,
+          style: LiquidGlassStyle.pill(colorScheme),
+          shadows: ultra ? dockGlassShadows(colorScheme) : const [],
+          glow: _glow,
+          child: Material(
+            color: glass
+                ? Colors.transparent
+                : SurfaceLevel.floatingOf(colorScheme).colorOf(colorScheme),
+            shape: AppShape.full,
+            child: Semantics(
+              button: true,
+              enabled: enabled,
+              label: action.tooltip,
+              child: FocusRing(
+                shape: AppShape.full,
+                standsOff: true,
+                child: InkResponse(
+                  onTap: enabled ? action.onPressed : null,
+                  onHighlightChanged: _light,
+                  customBorder: AppShape.full,
+                  highlightShape: BoxShape.circle,
+                  containedInkWell: true,
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: const WidgetStatePropertyAll(
+                    Colors.transparent,
+                  ),
+                  child: SizedBox.square(
+                    dimension: widget.diameter,
+                    child: Center(child: icon),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 ({double width, double height}) _measureLabel(
   BuildContext context,
   String label,
@@ -306,17 +404,38 @@ class NavigationDockDestination {
   final String label;
 }
 
+/// The page's own action, as [NavigationDock] shows it past the bar.
+class NavigationDockAction {
+  const NavigationDockAction({
+    required this.glyph,
+    required this.tooltip,
+    required this.onPressed,
+    this.enabled = true,
+    this.loading = false,
+  });
+
+  final Glyph glyph;
+  final String tooltip;
+  final VoidCallback onPressed;
+  final bool enabled;
+  final bool loading;
+}
+
 class NavigationDock extends StatelessWidget {
   const NavigationDock({
     super.key,
     required this.destinations,
     required this.selectedIndex,
     required this.onSelected,
+    this.action,
   });
 
   final List<NavigationDockDestination> destinations;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
+
+  /// The current page's action, shown as a circle past the bar.
+  final NavigationDockAction? action;
 
   static double heightOf(BuildContext context) {
     return _barHeight +
@@ -365,6 +484,14 @@ class NavigationDock extends StatelessWidget {
                   ),
                 ),
               ),
+              if (action case final action?)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: _actionGap),
+                  child: SizedBox.square(
+                    dimension: height,
+                    child: _DockActionButton(action: action, diameter: height),
+                  ),
+                ),
             ],
           ),
         ),

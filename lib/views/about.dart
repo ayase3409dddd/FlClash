@@ -126,6 +126,17 @@ class AboutView extends ConsumerWidget {
   }
 }
 
+/// Opens the About page on the full-screen route the tools row takes on
+/// desktop; the mobile row's open-container transition needs a row to grow
+/// from, which a dock button has not.
+Future<void> showAboutPage(BuildContext context) {
+  return showExtend(
+    context,
+    props: const ExtendProps(forceFull: true),
+    builder: (_) => const AboutView(),
+  );
+}
+
 class _AboutHero extends StatelessWidget {
   final bool isCheckingUpdate;
   final VoidCallback onCheckUpdate;
