@@ -383,6 +383,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Coloca una imagen detrás de la interfaz; el brillo y el desenfoque mantienen la legibilidad.",
     ),
     "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Activado"),
+    "backgroundFitFill": MessageLookupByLibrary.simpleMessage("Rellenar"),
+    "backgroundFitFit": MessageLookupByLibrary.simpleMessage("Ajustar"),
+    "backgroundFitMode": MessageLookupByLibrary.simpleMessage(
+      "Ajuste del fondo",
+    ),
+    "backgroundFitStretch": MessageLookupByLibrary.simpleMessage("Estirar"),
     "backgroundImage": MessageLookupByLibrary.simpleMessage("Imagen de fondo"),
     "backgroundPick": MessageLookupByLibrary.simpleMessage("Elegir imagen"),
     "backup": MessageLookupByLibrary.simpleMessage("Copia de seguridad"),

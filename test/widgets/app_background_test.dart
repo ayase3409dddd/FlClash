@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/widgets/app_background.dart';
@@ -17,6 +18,7 @@ final _pngBytes = base64Decode(
 
 Widget _app(AppSettingProps setting) {
   return ProviderScope(
+    key: ObjectKey(setting),
     overrides: [appSettingProvider.overrideWithBuild((_, _) => setting)],
     child: const MaterialApp(
       home: AppBackground(child: SizedBox.expand(key: _childKey)),
@@ -107,5 +109,25 @@ void main() {
 
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(BackdropFilter), findsNothing);
+  });
+
+  testWidgets('applies the fit mode to the picture', (tester) async {
+    for (final (mode, fit) in [
+      (BackgroundFitMode.fill, BoxFit.cover),
+      (BackgroundFitMode.stretch, BoxFit.fill),
+      (BackgroundFitMode.fit, BoxFit.contain),
+    ]) {
+      await tester.pumpWidget(
+        _app(
+          AppSettingProps(
+            backgroundEnabled: true,
+            backgroundImagePath: picturePath,
+            backgroundFitMode: mode,
+          ),
+        ),
+      );
+
+      expect(tester.widget<Image>(find.byType(Image)).fit, fit);
+    }
   });
 }

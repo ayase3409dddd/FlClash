@@ -196,7 +196,9 @@ class _HomeShell extends ConsumerWidget {
         (actionPlacement == NavigationDockActionPlacement.topLeft ||
             actionPlacement == NavigationDockActionPlacement.topRight);
     return Material(
-      color: SurfaceLevel.page.colorOf(context.colorScheme),
+      color: Wallpaper.visibleOf(context)
+          ? Colors.transparent
+          : SurfaceLevel.page.colorOf(context.colorScheme),
       child: Column(
         children: [
           Expanded(

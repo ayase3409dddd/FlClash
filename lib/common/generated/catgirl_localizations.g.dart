@@ -1420,6 +1420,21 @@ mixin CatgirlLocalizationOverrides on AppLocalizations {
       catgirlize(base.backgroundEnabled, localeName);
 
   @override
+  String get backgroundFitMode =>
+      catgirlize(base.backgroundFitMode, localeName);
+
+  @override
+  String get backgroundFitFill =>
+      catgirlize(base.backgroundFitFill, localeName);
+
+  @override
+  String get backgroundFitStretch =>
+      catgirlize(base.backgroundFitStretch, localeName);
+
+  @override
+  String get backgroundFitFit => catgirlize(base.backgroundFitFit, localeName);
+
+  @override
   String get backgroundDesc => catgirlize(base.backgroundDesc, localeName);
 
   @override

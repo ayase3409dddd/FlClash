@@ -14,6 +14,7 @@ import 'package:fl_clash/ui/shape.dart';
 import 'package:fl_clash/ui/surface.dart';
 import 'package:fl_clash/ui/typography.dart';
 import 'package:fl_clash/ui/view_scope.dart';
+import 'package:fl_clash/ui/wallpaper.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -620,7 +621,11 @@ class CommonScaffoldState extends State<CommonScaffold> {
     return FloatingHeader(
       backgroundColor:
           widget.backgroundColor ??
-          SurfaceLevel.page.colorOf(context.colorScheme),
+          (Wallpaper.visibleOf(context)
+              ? SurfaceLevel.page
+                    .colorOf(context.colorScheme)
+                    .withValues(alpha: 0.8)
+              : SurfaceLevel.page.colorOf(context.colorScheme)),
       fadeStart: top / (top + pageToolbarHeight),
       overhang: _headerOverhang,
       child: appBar,
@@ -816,14 +821,20 @@ class CommonScaffoldState extends State<CommonScaffold> {
           extendBodyBehindAppBar: barFloats,
           body: _BodyScope(child: content),
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          backgroundColor: widget.backgroundColor,
+          backgroundColor:
+              widget.backgroundColor ??
+              (Wallpaper.visibleOf(context) ? Colors.transparent : null),
         ),
       );
     }
     final sheetBody = FloatingHeaderBody(
       backgroundColor:
           widget.backgroundColor ??
-          SurfaceLevel.page.colorOf(context.colorScheme),
+          (Wallpaper.visibleOf(context)
+              ? SurfaceLevel.page
+                    .colorOf(context.colorScheme)
+                    .withValues(alpha: 0.8)
+              : SurfaceLevel.page.colorOf(context.colorScheme)),
       header: SheetToolBar(appBar: appBar, dragHandle: form.hasDragHandle),
       footer: form.dockedSearch == null || _sorting
           ? null
@@ -847,7 +858,9 @@ class CommonScaffoldState extends State<CommonScaffold> {
         child: Scaffold(
           body: footed,
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          backgroundColor: widget.backgroundColor,
+          backgroundColor:
+              widget.backgroundColor ??
+              (Wallpaper.visibleOf(context) ? Colors.transparent : null),
         ),
       );
     }

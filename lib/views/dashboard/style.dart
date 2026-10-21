@@ -24,7 +24,9 @@ class DashboardColors {
     final colorScheme = context.colorScheme;
     final card = SurfaceLevel.card.colorOf(colorScheme);
     return DashboardColors._(
-      page: SurfaceLevel.page.colorOf(colorScheme),
+      page: Wallpaper.visibleOf(context)
+          ? Colors.transparent
+          : SurfaceLevel.page.colorOf(colorScheme),
       card: card,
       tone: SurfaceLevel.block.colorOf(colorScheme),
       tone2: SurfaceLevel.inset.colorOf(colorScheme),

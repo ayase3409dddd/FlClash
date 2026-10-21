@@ -3465,6 +3465,36 @@ class AppLocalizations {
     );
   }
 
+  /// `Background fit`
+  String get backgroundFitMode {
+    return Intl.message(
+      'Background fit',
+      name: 'backgroundFitMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill`
+  String get backgroundFitFill {
+    return Intl.message('Fill', name: 'backgroundFitFill', desc: '', args: []);
+  }
+
+  /// `Stretch`
+  String get backgroundFitStretch {
+    return Intl.message(
+      'Stretch',
+      name: 'backgroundFitStretch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fit`
+  String get backgroundFitFit {
+    return Intl.message('Fit', name: 'backgroundFitFit', desc: '', args: []);
+  }
+
   /// `Puts a picture behind the interface; brightness and blur keep the text readable.`
   String get backgroundDesc {
     return Intl.message(

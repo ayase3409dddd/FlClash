@@ -71,3 +71,4 @@ export 'theme.dart';
 export 'theme_cross_fade.dart';
 export 'typography.dart';
 export 'view_scope.dart';
+export 'wallpaper.dart';

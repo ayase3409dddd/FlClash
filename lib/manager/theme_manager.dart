@@ -38,46 +38,14 @@ Widget _closeButtonIcon(BuildContext context) =>
 /// A rebuilt ThemeData never equals the last, and ThemeCrossFade fades on that.
 final _appThemes = <Brightness, ({Object inputs, ThemeData theme})>{};
 
-const _backgroundSurfaceAlpha = 0.8;
-
-/// Makes the page surfaces translucent for the background, keeping text readable.
-ColorScheme _surfacesForBackground(ColorScheme scheme, bool backgroundVisible) {
-  if (!backgroundVisible) {
-    return scheme;
-  }
-  Color translucent(Color color) =>
-      color.withValues(alpha: _backgroundSurfaceAlpha);
-  return scheme.copyWith(
-    surface: translucent(scheme.surface),
-    surfaceDim: translucent(scheme.surfaceDim),
-    surfaceBright: translucent(scheme.surfaceBright),
-    surfaceContainerLowest: translucent(scheme.surfaceContainerLowest),
-    surfaceContainerLow: translucent(scheme.surfaceContainerLow),
-    surfaceContainer: translucent(scheme.surfaceContainer),
-    surfaceContainerHigh: translucent(scheme.surfaceContainerHigh),
-    surfaceContainerHighest: translucent(scheme.surfaceContainerHighest),
-  );
-}
-
 ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
   final locale = ref.watch(appSettingProvider.select((state) => state.locale));
-  final backgroundVisible = ref.watch(
-    appSettingProvider.select(
-      (state) =>
-          state.backgroundEnabled &&
-          (state.backgroundImagePath?.isNotEmpty ?? false),
-    ),
-  );
   final themeSetting = ref.watch(
     themeSettingProvider.select(
       (state) => (fontFamily: state.fontFamily, pureBlack: state.pureBlack),
     ),
   );
-  final opaqueColorScheme = ref.watch(genColorSchemeProvider(brightness));
-  final colorScheme = _surfacesForBackground(
-    opaqueColorScheme,
-    backgroundVisible,
-  );
+  final colorScheme = ref.watch(genColorSchemeProvider(brightness));
   final plainDark = brightness == Brightness.dark && themeSetting.pureBlack
       ? ref.watch(genColorSchemeProvider(brightness, pureBlack: false))
       : null;
@@ -88,7 +56,6 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
   final inputs = (
     platform: defaultTargetPlatform,
     themeSetting: themeSetting,
-    backgroundVisible: backgroundVisible,
     colorScheme: colorScheme,
     plainDark: plainDark,
     locales: locales.join(','),
@@ -115,10 +82,7 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
         ElevatedColorScheme(
           // Plain dark is pure black a level up, with the seed's tint that a
           // lift from black would lose.
-          _surfacesForBackground(
-            plainDark ?? opaqueColorScheme.elevated,
-            backgroundVisible,
-          ),
+          plainDark ?? colorScheme.elevated,
         ),
     ],
   ).withAppShapes.withAppSurfaces.withAppTypography;

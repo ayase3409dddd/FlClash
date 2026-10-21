@@ -251,6 +251,9 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(false) bool backgroundEnabled,
     String? backgroundImagePath,
 
+    /// How the background picture meets the screen.
+    @Default(BackgroundFitMode.fill) BackgroundFitMode backgroundFitMode,
+
     /// Dims the background picture, 0 to 1.
     @Default(0.35) double backgroundBrightness,
 

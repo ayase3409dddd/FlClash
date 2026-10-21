@@ -462,6 +462,13 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(readSetting().backgroundBrightness, greaterThan(0.35));
+
+      expect(find.text('Background fit'), findsOneWidget);
+      await tester.tap(find.text('Background fit'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Stretch').last);
+      await tester.pumpAndSettle();
+      expect(readSetting().backgroundFitMode, BackgroundFitMode.stretch);
     });
   });
 

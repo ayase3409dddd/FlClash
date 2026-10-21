@@ -984,6 +984,9 @@ class _BackgroundItem extends ConsumerWidget {
     final path = ref.watch(
       appSettingProvider.select((state) => state.backgroundImagePath),
     );
+    final fitMode = ref.watch(
+      appSettingProvider.select((state) => state.backgroundFitMode),
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1023,6 +1026,26 @@ class _BackgroundItem extends ConsumerWidget {
                   leading: const GlyphIcon(AppGlyphs.delete),
                   title: Text(appLocalizations.remove),
                   onTap: () => _remove(ref),
+                ),
+              if (enabled)
+                ListItem<BackgroundFitMode>.options(
+                  title: Text(appLocalizations.backgroundFitMode),
+                  options: BackgroundFitMode.values,
+                  value: fitMode,
+                  textBuilder: (mode) => switch (mode) {
+                    BackgroundFitMode.fill =>
+                      appLocalizations.backgroundFitFill,
+                    BackgroundFitMode.stretch =>
+                      appLocalizations.backgroundFitStretch,
+                    BackgroundFitMode.fit => appLocalizations.backgroundFitFit,
+                  },
+                  onChanged: (value) {
+                    ref
+                        .read(appSettingProvider.notifier)
+                        .update(
+                          (state) => state.copyWith(backgroundFitMode: value),
+                        );
+                  },
                 ),
             ],
           ),

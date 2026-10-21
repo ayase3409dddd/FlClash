@@ -369,6 +369,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Помещает изображение за интерфейсом; яркость и размытие сохраняют читаемость.",
     ),
     "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Включено"),
+    "backgroundFitFill": MessageLookupByLibrary.simpleMessage("Заполнить"),
+    "backgroundFitFit": MessageLookupByLibrary.simpleMessage("Вписать"),
+    "backgroundFitMode": MessageLookupByLibrary.simpleMessage("Подгонка фона"),
+    "backgroundFitStretch": MessageLookupByLibrary.simpleMessage("Растянуть"),
     "backgroundImage": MessageLookupByLibrary.simpleMessage(
       "Фоновое изображение",
     ),

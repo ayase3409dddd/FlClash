@@ -809,6 +809,10 @@ enum TabAnimation { slide, fade }
 /// Where the floating bar's quick action sits around the bar.
 enum QuickActionPosition { left, right, topLeft, topRight }
 
+/// How the background picture meets the screen: cover it, stretch it, or show
+/// it whole.
+enum BackgroundFitMode { fill, stretch, fit }
+
 enum LiquidGlassMode { none, standard, ultra }
 
 enum Language { yaml, javaScript, json }

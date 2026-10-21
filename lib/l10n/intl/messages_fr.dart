@@ -384,6 +384,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Place une image derrière l\'interface ; luminosité et flou préservent la lisibilité.",
     ),
     "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Activé"),
+    "backgroundFitFill": MessageLookupByLibrary.simpleMessage("Remplir"),
+    "backgroundFitFit": MessageLookupByLibrary.simpleMessage("Ajuster"),
+    "backgroundFitMode": MessageLookupByLibrary.simpleMessage(
+      "Ajustement du fond",
+    ),
+    "backgroundFitStretch": MessageLookupByLibrary.simpleMessage("Étirer"),
     "backgroundImage": MessageLookupByLibrary.simpleMessage(
       "Image d\'arrière-plan",
     ),

@@ -250,7 +250,7 @@ class AppSidebarContainer extends ConsumerWidget {
     final hasSidebar = viewMode != ViewMode.mobile;
     final isLtr = Directionality.of(context) == TextDirection.ltr;
     return Container(
-      color: blur ? Colors.transparent : page,
+      color: blur || Wallpaper.visibleOf(context) ? Colors.transparent : page,
       child: Row(
         children: [
           AnimatedVisibility.sidebar(

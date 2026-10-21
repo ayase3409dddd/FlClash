@@ -11,7 +11,7 @@ class _TestAppSetting extends AppSetting {
 }
 
 void main() {
-  testWidgets('the page turns translucent only for a background picture', (
+  testWidgets('the theme stays opaque while a picture is shown', (
     tester,
   ) async {
     final container = ProviderContainer(
@@ -36,24 +36,15 @@ void main() {
 
     container.read(appSettingProvider.notifier).value = const AppSettingProps(
       backgroundEnabled: true,
-    );
-    await tester.pump();
-    // Enabled without a picture paints nothing behind the page.
-    expect(theme.scaffoldBackgroundColor.a, 1.0);
-
-    container.read(appSettingProvider.notifier).value = const AppSettingProps(
-      backgroundEnabled: true,
       backgroundImagePath: '/background.png',
+      backgroundBrightness: 0.4,
     );
     await tester.pump();
 
-    expect(theme.colorScheme.surface.a, lessThan(1.0));
-    expect(theme.colorScheme.surfaceContainer.a, lessThan(1.0));
-    expect(theme.scaffoldBackgroundColor.a, lessThan(1.0));
-
-    container.read(appSettingProvider.notifier).value = const AppSettingProps();
-    await tester.pump();
-
+    // Pages clear their own fill through Wallpaper instead, so the scheme and
+    // every surface that shares it keep full contrast.
+    expect(theme.colorScheme.surface.a, 1.0);
+    expect(theme.colorScheme.surfaceContainer.a, 1.0);
     expect(theme.scaffoldBackgroundColor.a, 1.0);
   });
 }

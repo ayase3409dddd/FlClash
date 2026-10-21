@@ -50,6 +50,12 @@ _AppSettingProps _$AppSettingPropsFromJson(
       (json['floatingNavigationBarBottomMargin'] as num?)?.toDouble(),
   backgroundEnabled: json['backgroundEnabled'] as bool? ?? false,
   backgroundImagePath: json['backgroundImagePath'] as String?,
+  backgroundFitMode:
+      $enumDecodeNullable(
+        _$BackgroundFitModeEnumMap,
+        json['backgroundFitMode'],
+      ) ??
+      BackgroundFitMode.fill,
   backgroundBrightness:
       (json['backgroundBrightness'] as num?)?.toDouble() ?? 0.35,
   backgroundBlur: (json['backgroundBlur'] as num?)?.toDouble() ?? 0.0,
@@ -129,6 +135,7 @@ Map<String, dynamic> _$AppSettingPropsToJson(
       instance.floatingNavigationBarBottomMargin,
   'backgroundEnabled': instance.backgroundEnabled,
   'backgroundImagePath': instance.backgroundImagePath,
+  'backgroundFitMode': _$BackgroundFitModeEnumMap[instance.backgroundFitMode]!,
   'backgroundBrightness': instance.backgroundBrightness,
   'backgroundBlur': instance.backgroundBlur,
   'autoCheckUpdate': instance.autoCheckUpdate,
@@ -161,6 +168,12 @@ const _$QuickActionPositionEnumMap = {
   QuickActionPosition.right: 'right',
   QuickActionPosition.topLeft: 'topLeft',
   QuickActionPosition.topRight: 'topRight',
+};
+
+const _$BackgroundFitModeEnumMap = {
+  BackgroundFitMode.fill: 'fill',
+  BackgroundFitMode.stretch: 'stretch',
+  BackgroundFitMode.fit: 'fit',
 };
 
 const _$RestoreStrategyEnumMap = {
