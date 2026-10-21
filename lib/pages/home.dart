@@ -166,7 +166,20 @@ class _HomeShell extends ConsumerWidget {
     final floating = ref.watch(
       appSettingProvider.select((state) => state.floatingNavigationBar),
     );
-    final action = isMobile && floating
+    final quickAction = ref.watch(
+      appSettingProvider.select(
+        (state) => state.floatingNavigationBarQuickAction,
+      ),
+    );
+    final bottomMargin = ref.watch(
+      appSettingProvider.select(
+        (state) => state.floatingNavigationBarBottomMargin,
+      ),
+    );
+    final barBottomMargin = bottomMargin
+        ?.clamp(0.0, MediaQuery.sizeOf(context).height * 0.3)
+        .toDouble();
+    final action = isMobile && floating && quickAction
         ? _buildDockAction(context, ref, state.pageLabel)
         : null;
     return Material(
@@ -181,7 +194,10 @@ class _HomeShell extends ConsumerWidget {
                     policy: PageTraversalPolicy(),
                     child: BottomInsetScope(
                       inset: isMobile && floating
-                          ? NavigationDock.insetOf(context)
+                          ? NavigationDock.insetOf(
+                              context,
+                              bottomMargin: barBottomMargin,
+                            )
                           : 0,
                       child: _BodyPadding(isMobile: isMobile, child: child),
                     ),
@@ -203,6 +219,7 @@ class _HomeShell extends ConsumerWidget {
                             ),
                         ],
                         action: action,
+                        bottomMargin: barBottomMargin,
                         selectedIndex: state.currentIndex,
                         onSelected: (index) {
                           _handleToPage(navigationItems[index].label, ref);
@@ -419,7 +436,7 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
     await _pageController.animateToPage(
       index,
       duration: fade ? fadeTabDuration : kTabScrollDuration,
-      curve: fade ? fadeTabCurve : Curves.easeOut,
+      curve: fade ? fadeTabCurve : slideTabCurve,
     );
     if (mounted && slide == _slide && _order != null) {
       setState(() => _order = null);

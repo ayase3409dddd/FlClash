@@ -410,6 +410,8 @@
   "saveChanges": "Save the changes?",
   "cannotSave": "Can't save",
   "navigationBarStyle": "Bottom bar",
+  "quickActionButton": "Quick action button",
+  "navigationBarBottomMargin": "Distance from bottom",
   "floating": "Floating",
   "docked": "Docked",
   "slide": "Slide",

@@ -37,6 +37,10 @@ _AppSettingProps _$AppSettingPropsFromJson(
       ) ??
       TabAnimation.slide,
   floatingNavigationBar: json['floatingNavigationBar'] as bool? ?? true,
+  floatingNavigationBarQuickAction:
+      json['floatingNavigationBarQuickAction'] as bool? ?? true,
+  floatingNavigationBarBottomMargin:
+      (json['floatingNavigationBarBottomMargin'] as num?)?.toDouble(),
   autoCheckUpdate: json['autoCheckUpdate'] as bool? ?? true,
   sidebarExpanded:
       _readSidebarExpanded(json, 'sidebarExpanded') as bool? ?? true,
@@ -87,40 +91,44 @@ _AppSettingProps _$AppSettingPropsFromJson(
       const {},
 );
 
-Map<String, dynamic> _$AppSettingPropsToJson(_AppSettingProps instance) =>
-    <String, dynamic>{
-      'locale': instance.locale,
-      'dashboardWidgets': instance.dashboardWidgets
-          .map((e) => _$DashboardWidgetEnumMap[e]!)
-          .toList(),
-      'onlyStatisticsProxy': instance.onlyStatisticsProxy,
-      'showNotificationStopAction': instance.showNotificationStopAction,
-      'autoLaunch': instance.autoLaunch,
-      'silentLaunch': instance.silentLaunch,
-      'autoRun': instance.autoRun,
-      'openLogs': instance.openLogs,
-      'closeConnections': instance.closeConnections,
-      'testUrl': instance.testUrl,
-      'tabAnimation': _$TabAnimationEnumMap[instance.tabAnimation]!,
-      'floatingNavigationBar': instance.floatingNavigationBar,
-      'autoCheckUpdate': instance.autoCheckUpdate,
-      'sidebarExpanded': instance.sidebarExpanded,
-      'acceptedDisclaimerVersion': instance.acceptedDisclaimerVersion,
-      'minimizeOnExit': instance.minimizeOnExit,
-      'hidden': instance.hidden,
-      'developerMode': instance.developerMode,
-      'restoreStrategy': _$RestoreStrategyEnumMap[instance.restoreStrategy]!,
-      'showTrayTitle': instance.showTrayTitle,
-      'checkCertificate': instance.checkCertificate,
-      'userAgents': instance.userAgents,
-      'filters': instance.filters,
-      'hideIp': instance.hideIp,
-      'editorLineWrap': instance.editorLineWrap,
-      'editorFontSize': _$EditorFontSizeEnumMap[instance.editorFontSize]!,
-      'serviceOrder': instance.serviceOrder,
-      'disabledServices': instance.disabledServices,
-      'tableColumnWidths': instance.tableColumnWidths,
-    };
+Map<String, dynamic> _$AppSettingPropsToJson(
+  _AppSettingProps instance,
+) => <String, dynamic>{
+  'locale': instance.locale,
+  'dashboardWidgets': instance.dashboardWidgets
+      .map((e) => _$DashboardWidgetEnumMap[e]!)
+      .toList(),
+  'onlyStatisticsProxy': instance.onlyStatisticsProxy,
+  'showNotificationStopAction': instance.showNotificationStopAction,
+  'autoLaunch': instance.autoLaunch,
+  'silentLaunch': instance.silentLaunch,
+  'autoRun': instance.autoRun,
+  'openLogs': instance.openLogs,
+  'closeConnections': instance.closeConnections,
+  'testUrl': instance.testUrl,
+  'tabAnimation': _$TabAnimationEnumMap[instance.tabAnimation]!,
+  'floatingNavigationBar': instance.floatingNavigationBar,
+  'floatingNavigationBarQuickAction': instance.floatingNavigationBarQuickAction,
+  'floatingNavigationBarBottomMargin':
+      instance.floatingNavigationBarBottomMargin,
+  'autoCheckUpdate': instance.autoCheckUpdate,
+  'sidebarExpanded': instance.sidebarExpanded,
+  'acceptedDisclaimerVersion': instance.acceptedDisclaimerVersion,
+  'minimizeOnExit': instance.minimizeOnExit,
+  'hidden': instance.hidden,
+  'developerMode': instance.developerMode,
+  'restoreStrategy': _$RestoreStrategyEnumMap[instance.restoreStrategy]!,
+  'showTrayTitle': instance.showTrayTitle,
+  'checkCertificate': instance.checkCertificate,
+  'userAgents': instance.userAgents,
+  'filters': instance.filters,
+  'hideIp': instance.hideIp,
+  'editorLineWrap': instance.editorLineWrap,
+  'editorFontSize': _$EditorFontSizeEnumMap[instance.editorFontSize]!,
+  'serviceOrder': instance.serviceOrder,
+  'disabledServices': instance.disabledServices,
+  'tableColumnWidths': instance.tableColumnWidths,
+};
 
 const _$TabAnimationEnumMap = {
   TabAnimation.slide: 'slide',

@@ -321,14 +321,53 @@ void main() {
       await pumpThemeView(tester);
 
       expect(readSetting().floatingNavigationBar, isTrue);
+      expect(find.text('Quick action button'), findsOneWidget);
 
       await tester.tap(find.text('Docked'));
       await tester.pumpAndSettle();
       expect(readSetting().floatingNavigationBar, isFalse);
+      expect(find.text('Quick action button'), findsNothing);
 
       await tester.tap(find.text('Floating'));
       await tester.pumpAndSettle();
       expect(readSetting().floatingNavigationBar, isTrue);
+      expect(find.text('Quick action button'), findsOneWidget);
+    });
+
+    testWidgets('toggles the quick action button', (tester) async {
+      await pumpThemeView(tester);
+
+      expect(readSetting().floatingNavigationBarQuickAction, isTrue);
+
+      await tester.tap(find.text('Quick action button'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Turn off').last);
+      await tester.pumpAndSettle();
+      expect(readSetting().floatingNavigationBarQuickAction, isFalse);
+
+      await tester.tap(find.text('Quick action button'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Turn on').last);
+      await tester.pumpAndSettle();
+      expect(readSetting().floatingNavigationBarQuickAction, isTrue);
+    });
+
+    testWidgets('sets the floating bar distance from the bottom', (
+      tester,
+    ) async {
+      await pumpThemeView(tester);
+
+      expect(readSetting().floatingNavigationBarBottomMargin, isNull);
+      expect(find.text('Distance from bottom'), findsOneWidget);
+
+      await tester.drag(
+        find.byKey(const ValueKey('navigation-bar-margin-slider')),
+        const Offset(160, 0),
+      );
+      await tester.pumpAndSettle();
+      final margin = readSetting().floatingNavigationBarBottomMargin;
+      expect(margin, isNotNull);
+      expect(margin, greaterThan(21));
     });
 
     testWidgets('picks a sliding or fading tab switch', (tester) async {
@@ -538,13 +577,23 @@ void main() {
       await pumpThemeView(tester);
 
       expect(readTheme().textScale.enable, isFalse);
-      expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNull);
+      expect(
+        tester
+            .widget<Slider>(find.byKey(const ValueKey('text-scale-slider')))
+            .onChanged,
+        isNull,
+      );
 
       await tester.tap(find.text('Custom'));
       await tester.pumpAndSettle();
 
       expect(readTheme().textScale.enable, isTrue);
-      expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNotNull);
+      expect(
+        tester
+            .widget<Slider>(find.byKey(const ValueKey('text-scale-slider')))
+            .onChanged,
+        isNotNull,
+      );
 
       await tester.tap(find.text('Follow system'));
       await tester.pumpAndSettle();
@@ -558,7 +607,7 @@ void main() {
       await tester.pumpAndSettle();
       final before = readTheme().textScale.scale;
 
-      final slider = find.byType(Slider);
+      final slider = find.byKey(const ValueKey('text-scale-slider'));
       final gesture = await tester.startGesture(tester.getCenter(slider));
       await gesture.moveBy(const Offset(120, 0));
       await tester.pump();

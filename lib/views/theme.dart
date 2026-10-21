@@ -632,38 +632,183 @@ class _NavigationBarItem extends ConsumerWidget {
     final appLocalizations = context.appLocalizations;
     final floatingBar = ref.watch(_floatingBarProvider);
     final liquidGlass = ref.watch(_liquidGlassProvider);
-    final colorScheme = context.colorScheme;
-    return PreviewChoiceGroup<bool>(
-      info: Info(
-        label: appLocalizations.navigationBarStyle,
-        glyph: AppGlyphs.layers,
+    final quickAction = ref.watch(
+      appSettingProvider.select(
+        (state) => state.floatingNavigationBarQuickAction,
       ),
-      value: floatingBar,
-      choices: [
-        PreviewChoice(
-          value: true,
-          label: appLocalizations.floating,
-          pictogram: MiniScreenThumb(
-            screen: MiniScreen(
-              colorScheme: colorScheme,
-              floatingBar: true,
-              liquidGlass: liquidGlass,
+    );
+    final colorScheme = context.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        PreviewChoiceGroup<bool>(
+          info: Info(
+            label: appLocalizations.navigationBarStyle,
+            glyph: AppGlyphs.layers,
+          ),
+          value: floatingBar,
+          choices: [
+            PreviewChoice(
+              value: true,
+              label: appLocalizations.floating,
+              pictogram: MiniScreenThumb(
+                screen: MiniScreen(
+                  colorScheme: colorScheme,
+                  floatingBar: true,
+                  liquidGlass: liquidGlass,
+                ),
+              ),
+            ),
+            PreviewChoice(
+              value: false,
+              label: appLocalizations.docked,
+              pictogram: MiniScreenThumb(
+                screen: MiniScreen(
+                  colorScheme: colorScheme,
+                  floatingBar: false,
+                ),
+              ),
+            ),
+          ],
+          onChanged: (value) {
+            ref
+                .read(appSettingProvider.notifier)
+                .update(
+                  (state) => state.copyWith(floatingNavigationBar: value),
+                );
+          },
+        ),
+        if (floatingBar) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: generateSection(
+              items: [
+                ListItem<bool>.options(
+                  title: Text(appLocalizations.quickActionButton),
+                  options: const [true, false],
+                  value: quickAction,
+                  textBuilder: (value) => value
+                      ? appLocalizations.turnOn
+                      : appLocalizations.turnOff,
+                  onChanged: (value) {
+                    ref
+                        .read(appSettingProvider.notifier)
+                        .update(
+                          (state) => state.copyWith(
+                            floatingNavigationBarQuickAction: value,
+                          ),
+                        );
+                  },
+                ),
+              ],
             ),
           ),
-        ),
-        PreviewChoice(
-          value: false,
-          label: appLocalizations.docked,
-          pictogram: MiniScreenThumb(
-            screen: MiniScreen(colorScheme: colorScheme, floatingBar: false),
-          ),
-        ),
+          const _NavigationBarBottomMarginItem(),
+        ],
       ],
-      onChanged: (value) {
-        ref
-            .read(appSettingProvider.notifier)
-            .update((state) => state.copyWith(floatingNavigationBar: value));
-      },
+    );
+  }
+}
+
+class _NavigationBarBottomMarginItem extends ConsumerStatefulWidget {
+  const _NavigationBarBottomMarginItem();
+
+  @override
+  ConsumerState<_NavigationBarBottomMarginItem> createState() =>
+      _NavigationBarBottomMarginItemState();
+}
+
+class _NavigationBarBottomMarginItemState
+    extends ConsumerState<_NavigationBarBottomMarginItem> {
+  double? _draft;
+
+  void _update(double value) {
+    setState(() => _draft = null);
+    ref
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(floatingNavigationBarBottomMargin: value),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = context.appLocalizations;
+    final colorScheme = context.colorScheme;
+    final level = context.raisedSurfaceLevel;
+    final viewHeight = MediaQuery.sizeOf(context).height;
+    final maxMargin = viewHeight * 0.3;
+    final defaultMargin = max(
+      NavigationDock.minimumBottomMargin,
+      MediaQuery.viewPaddingOf(context).bottom,
+    );
+    final stored = ref.watch(
+      appSettingProvider.select(
+        (state) => state.floatingNavigationBarBottomMargin,
+      ),
+    );
+    final value = (_draft ?? stored ?? defaultMargin)
+        .clamp(0.0, maxMargin)
+        .toDouble();
+    final percent = '${(value / viewHeight * 100).round()}%';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+        decoration: ShapeDecoration(
+          color: level.colorOf(colorScheme),
+          shape: AppShape.lg,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    appLocalizations.navigationBarBottomMargin,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: true)
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: level.next.colorOf(colorScheme),
+                    shape: AppShape.full,
+                  ),
+                  child: Text(
+                    percent,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: true)
+                        .toTabular
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ],
+            ),
+            MediaQuery.withNoTextScaling(
+              child: SliderTheme(
+                data: SliderDefaultsM3(context),
+                child: Slider(
+                  key: const ValueKey('navigation-bar-margin-slider'),
+                  padding: EdgeInsets.zero,
+                  min: 0,
+                  max: maxMargin,
+                  value: value,
+                  label: percent,
+                  onChanged: (value) => setState(() => _draft = value),
+                  onChangeEnd: _update,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1024,6 +1169,7 @@ class _TextScaleFactorItemState extends ConsumerState<_TextScaleFactorItem> {
                             child: SliderTheme(
                               data: SliderDefaultsM3(context),
                               child: Slider(
+                                key: const ValueKey('text-scale-slider'),
                                 padding: EdgeInsets.zero,
                                 min: minTextScale,
                                 max: maxTextScale,

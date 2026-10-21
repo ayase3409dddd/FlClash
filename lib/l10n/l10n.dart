@@ -3300,6 +3300,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Quick action button`
+  String get quickActionButton {
+    return Intl.message(
+      'Quick action button',
+      name: 'quickActionButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Distance from bottom`
+  String get navigationBarBottomMargin {
+    return Intl.message(
+      'Distance from bottom',
+      name: 'navigationBarBottomMargin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Floating`
   String get floating {
     return Intl.message('Floating', name: 'floating', desc: '', args: []);

@@ -1167,6 +1167,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthsAgoShort": m48,
     "more": MessageLookupByLibrary.simpleMessage("More"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
+    "navigationBarBottomMargin": MessageLookupByLibrary.simpleMessage(
+      "Distance from bottom",
+    ),
     "navigationBarStyle": MessageLookupByLibrary.simpleMessage("Bottom bar"),
     "network": MessageLookupByLibrary.simpleMessage("Network"),
     "networkAccessDeniedError": m49,
@@ -1369,6 +1372,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "qrcode": MessageLookupByLibrary.simpleMessage("QR code"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
       "Scan a QR code to obtain a profile",
+    ),
+    "quickActionButton": MessageLookupByLibrary.simpleMessage(
+      "Quick action button",
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Quick actions"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Quick edit"),

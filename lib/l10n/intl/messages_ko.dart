@@ -986,6 +986,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthsAgoShort": m48,
     "more": MessageLookupByLibrary.simpleMessage("더 보기"),
     "name": MessageLookupByLibrary.simpleMessage("이름"),
+    "navigationBarBottomMargin": MessageLookupByLibrary.simpleMessage(
+      "하단으로부터의 거리",
+    ),
     "navigationBarStyle": MessageLookupByLibrary.simpleMessage("하단 바"),
     "network": MessageLookupByLibrary.simpleMessage("네트워크"),
     "networkAccessDeniedError": m49,
@@ -1155,6 +1158,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pureBlackMode": MessageLookupByLibrary.simpleMessage("퓨어 블랙 모드"),
     "qrcode": MessageLookupByLibrary.simpleMessage("QR 코드"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage("QR 코드를 스캔하여 프로필 가져오기"),
+    "quickActionButton": MessageLookupByLibrary.simpleMessage("빠른 작업 버튼"),
     "quickActions": MessageLookupByLibrary.simpleMessage("빠른 작업"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("빠른 편집"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("최근 요청"),

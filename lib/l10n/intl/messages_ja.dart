@@ -1001,6 +1001,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthsAgoShort": m48,
     "more": MessageLookupByLibrary.simpleMessage("その他"),
     "name": MessageLookupByLibrary.simpleMessage("名前"),
+    "navigationBarBottomMargin": MessageLookupByLibrary.simpleMessage(
+      "下端からの距離",
+    ),
     "navigationBarStyle": MessageLookupByLibrary.simpleMessage("ボトムバー"),
     "network": MessageLookupByLibrary.simpleMessage("ネットワーク"),
     "networkAccessDeniedError": m49,
@@ -1176,6 +1179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
       "QRコードをスキャンしてプロファイルを取得します",
     ),
+    "quickActionButton": MessageLookupByLibrary.simpleMessage("クイックアクションボタン"),
     "quickActions": MessageLookupByLibrary.simpleMessage("クイック操作"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("クイック編集"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("最近のリクエスト"),

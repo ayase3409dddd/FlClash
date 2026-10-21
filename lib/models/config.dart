@@ -237,6 +237,13 @@ abstract class AppSettingProps with _$AppSettingProps {
     @JsonKey(readValue: _readTabAnimation)
     TabAnimation tabAnimation,
     @Default(true) bool floatingNavigationBar,
+
+    /// Shows the page action as a circle past the floating bar.
+    @Default(true) bool floatingNavigationBarQuickAction,
+
+    /// The floating bar's gap to the bottom edge, in logical pixels. Null
+    /// keeps the bar clear of the system inset instead of an explicit value.
+    double? floatingNavigationBarBottomMargin,
     @Default(true) bool autoCheckUpdate,
     @Default(true)
     @JsonKey(readValue: _readSidebarExpanded)

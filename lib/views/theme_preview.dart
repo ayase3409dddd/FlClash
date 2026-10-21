@@ -126,7 +126,7 @@ class _ThemeLivePreviewState extends ConsumerState<ThemeLivePreview>
   );
   late final CurvedAnimation _slideCurve = CurvedAnimation(
     parent: _slide,
-    curve: Curves.easeOut,
+    curve: slideTabCurve,
   );
   int _selected = 0;
   int? _previous;
@@ -147,7 +147,7 @@ class _ThemeLivePreviewState extends ConsumerState<ThemeLivePreview>
     final tabAnimation = ref.read(appSettingProvider).tabAnimation;
     final fade = tabAnimation == TabAnimation.fade;
     _slide.duration = fade ? fadeTabDuration : kTabScrollDuration;
-    _slideCurve.curve = fade ? fadeTabCurve : Curves.easeOut;
+    _slideCurve.curve = fade ? fadeTabCurve : slideTabCurve;
     setState(() {
       _previous = _selected;
       _selected = index;

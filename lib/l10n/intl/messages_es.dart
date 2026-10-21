@@ -1254,6 +1254,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthsAgoShort": m48,
     "more": MessageLookupByLibrary.simpleMessage("Más"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
+    "navigationBarBottomMargin": MessageLookupByLibrary.simpleMessage(
+      "Distancia desde abajo",
+    ),
     "navigationBarStyle": MessageLookupByLibrary.simpleMessage(
       "Barra inferior",
     ),
@@ -1470,6 +1473,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "qrcode": MessageLookupByLibrary.simpleMessage("Código QR"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage(
       "Escanea un código QR para obtener un perfil",
+    ),
+    "quickActionButton": MessageLookupByLibrary.simpleMessage(
+      "Botón de acción rápida",
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Acciones rápidas"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Edición rápida"),

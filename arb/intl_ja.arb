@@ -410,6 +410,8 @@
   "saveChanges": "変更を保存しますか？",
   "cannotSave": "保存できません",
   "navigationBarStyle": "ボトムバー",
+  "quickActionButton": "クイックアクションボタン",
+  "navigationBarBottomMargin": "下端からの距離",
   "floating": "フローティング",
   "docked": "固定",
   "slide": "スライド",

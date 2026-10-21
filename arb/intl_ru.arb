@@ -410,6 +410,8 @@
   "saveChanges": "Сохранить изменения?",
   "cannotSave": "Не удалось сохранить",
   "navigationBarStyle": "Нижняя панель",
+  "quickActionButton": "Кнопка быстрого действия",
+  "navigationBarBottomMargin": "Расстояние от нижнего края",
   "floating": "Плавающая",
   "docked": "Закреплённая",
   "slide": "Сдвиг",

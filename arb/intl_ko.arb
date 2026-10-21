@@ -410,6 +410,8 @@
   "saveChanges": "변경 사항을 저장하시겠습니까?",
   "cannotSave": "저장할 수 없음",
   "navigationBarStyle": "하단 바",
+  "quickActionButton": "빠른 작업 버튼",
+  "navigationBarBottomMargin": "하단으로부터의 거리",
   "floating": "플로팅",
   "docked": "고정",
   "slide": "슬라이드",

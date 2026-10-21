@@ -410,6 +410,8 @@
   "saveChanges": "是否保存更改？",
   "cannotSave": "无法保存",
   "navigationBarStyle": "底栏",
+  "quickActionButton": "快捷按钮",
+  "navigationBarBottomMargin": "距底部距离",
   "floating": "悬浮",
   "docked": "固定",
   "slide": "滑动",

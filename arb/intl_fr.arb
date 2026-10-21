@@ -410,6 +410,8 @@
   "saveChanges": "Enregistrer les modifications ?",
   "cannotSave": "Enregistrement impossible",
   "navigationBarStyle": "Barre inférieure",
+  "quickActionButton": "Bouton d'action rapide",
+  "navigationBarBottomMargin": "Distance depuis le bas",
   "floating": "Flottante",
   "docked": "Ancrée",
   "slide": "Glissement",

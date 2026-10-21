@@ -428,6 +428,7 @@ class NavigationDock extends StatelessWidget {
     required this.selectedIndex,
     required this.onSelected,
     this.action,
+    this.bottomMargin,
   });
 
   final List<NavigationDockDestination> destinations;
@@ -437,28 +438,37 @@ class NavigationDock extends StatelessWidget {
   /// The current page's action, shown as a circle past the bar.
   final NavigationDockAction? action;
 
+  /// The bar's gap to the bottom edge; null keeps it clear of the system
+  /// inset.
+  final double? bottomMargin;
+
+  /// The gap the bar keeps when no explicit bottom margin is set.
+  static const double minimumBottomMargin = _edgeMargin;
+
   static double heightOf(BuildContext context) {
     return _barHeight +
         MediaQuery.textScalerOf(context).scale(_labelSize) -
         _labelSize;
   }
 
-  static double _bottomMarginOf(BuildContext context) =>
-      math.max(_edgeMargin, MediaQuery.paddingOf(context).bottom);
+  static double _bottomMarginOf(BuildContext context, [double? bottomMargin]) =>
+      bottomMargin ??
+      math.max(minimumBottomMargin, MediaQuery.paddingOf(context).bottom);
 
   /// The room content scrolling under the dock leaves at its foot.
-  static double insetOf(BuildContext context) =>
-      heightOf(context) + _bottomMarginOf(context);
+  static double insetOf(BuildContext context, {double? bottomMargin}) =>
+      heightOf(context) + _bottomMarginOf(context, bottomMargin);
 
   @override
   Widget build(BuildContext context) {
     final height = heightOf(context);
+    final margin = _bottomMarginOf(context, bottomMargin);
     final dock = Padding(
       padding: EdgeInsets.fromLTRB(
         _edgeMargin,
         _shadowRoom,
         _edgeMargin,
-        _bottomMarginOf(context),
+        margin,
       ),
       child: _HitSlop(
         child: SizedBox(
@@ -501,7 +511,7 @@ class NavigationDock extends StatelessWidget {
     // own keeps that to the dock (.agents/architecture.md, Rebuild Scopes).
     return SizedBox(
       width: double.infinity,
-      height: _shadowRoom + height + _bottomMarginOf(context),
+      height: _shadowRoom + height + margin,
       child: RepaintBoundary(child: LayoutBuilder(builder: (_, _) => dock)),
     );
   }

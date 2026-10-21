@@ -273,6 +273,56 @@ void main() {
     expect(find.byType(AboutView), findsOneWidget);
   });
 
+  testWidgets('the quick action setting hides the circle past the bar', (
+    tester,
+  ) async {
+    final container = await _pumpHome(tester);
+    expect(_dockAction('Start'), findsOneWidget);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(floatingNavigationBarQuickAction: false),
+        );
+    await tester.pumpAndSettle();
+    expect(_dockAction('Start'), findsNothing);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(floatingNavigationBarQuickAction: true),
+        );
+    await tester.pumpAndSettle();
+    expect(_dockAction('Start'), findsOneWidget);
+  });
+
+  testWidgets('the bottom margin setting moves the dock and its inset', (
+    tester,
+  ) async {
+    final container = await _pumpHome(tester);
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(floatingNavigationBarBottomMargin: 100),
+        );
+    await tester.pumpAndSettle();
+    final bar = tester.getRect(find.byType(FloatingNavigationBar));
+    expect(bar.bottom, moreOrLessEquals(_mobileSize.height - 100));
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) => state.copyWith(floatingNavigationBarBottomMargin: 1000),
+        );
+    await tester.pumpAndSettle();
+    final clamped = tester.getRect(find.byType(FloatingNavigationBar));
+    expect(
+      clamped.bottom,
+      moreOrLessEquals(_mobileSize.height - _mobileSize.height * 0.3),
+    );
+  });
+
   testWidgets('the dock action presses, and stays quiet when disabled', (
     tester,
   ) async {

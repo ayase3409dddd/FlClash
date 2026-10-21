@@ -4,6 +4,10 @@ import 'package:flutter/physics.dart';
 const fadeTabDuration = Duration(milliseconds: 220);
 const fadeTabCurve = Curves.easeInOut;
 
+/// The slide between tabs decelerates late, as an iOS page transition settles,
+/// rather than Flutter's default ease-out page route.
+const slideTabCurve = Cubic(0.05, 0.7, 0.1, 1);
+
 /// Plays [spring] over the first [seconds] of an animation, easing out the
 /// remaining residual so the curve still ends exactly at 1.
 class SpringCurve extends Curve {
