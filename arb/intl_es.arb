@@ -119,6 +119,7 @@
   "project": "Proyecto",
   "core": "Núcleo",
   "tabAnimation": "Animación de pestañas",
+  "tabAnimationSpeed": "Velocidad de animación",
   "desc": "Un cliente proxy multiplataforma basado en ClashMeta, sencillo de usar, de código abierto y sin anuncios.",
   "startVpn": "Iniciando VPN…",
   "stopVpn": "Deteniendo VPN…",

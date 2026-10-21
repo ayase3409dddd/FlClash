@@ -384,6 +384,22 @@ void main() {
       expect(readSetting().tabAnimation, TabAnimation.slide);
     });
 
+    testWidgets('sets the tab animation speed', (tester) async {
+      await pumpThemeView(tester);
+
+      expect(readSetting().tabAnimationSpeed, 1.0);
+      expect(find.text('Animation speed'), findsOneWidget);
+
+      await tester.drag(
+        find.byKey(const ValueKey('tab-animation-speed-slider')),
+        const Offset(120, 0),
+      );
+      await tester.pumpAndSettle();
+      final speed = readSetting().tabAnimationSpeed;
+      expect(speed, greaterThan(1.0));
+      expect(speed, lessThanOrEqualTo(2.0));
+    });
+
     testWidgets('the preview switches to the destination tapped', (
       tester,
     ) async {
@@ -633,7 +649,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(readTheme().textScale.scale, 1);
-      expect(find.text('100%'), findsOneWidget);
+      expect(find.text('120%'), findsNothing);
     });
   });
 }

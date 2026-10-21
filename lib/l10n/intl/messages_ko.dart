@@ -1479,6 +1479,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "systemProxy": MessageLookupByLibrary.simpleMessage("시스템 프록시"),
     "tab": MessageLookupByLibrary.simpleMessage("탭"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("탭 애니메이션"),
+    "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage("애니메이션 속도"),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("아이콘을 눌러 다시 시도"),
     "tapToAuthorize": MessageLookupByLibrary.simpleMessage("눌러서 허용"),
     "target": MessageLookupByLibrary.simpleMessage("대상"),

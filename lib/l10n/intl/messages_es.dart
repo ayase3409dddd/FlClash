@@ -1891,6 +1891,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimation": MessageLookupByLibrary.simpleMessage(
       "Animación de pestañas",
     ),
+    "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage(
+      "Velocidad de animación",
+    ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(
       "Toca el icono para reintentar",
     ),

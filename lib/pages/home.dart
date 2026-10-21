@@ -407,7 +407,8 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
     if (index == -1) {
       return;
     }
-    final tabAnimation = ref.read(appSettingProvider).tabAnimation;
+    final appSetting = ref.read(appSettingProvider);
+    final tabAnimation = appSetting.tabAnimation;
     final isMobile = ref.read(isMobileViewProvider);
     final slide = ++_slide;
     final page = _pageController.hasClients
@@ -435,7 +436,10 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
     final fade = tabAnimation == TabAnimation.fade;
     await _pageController.animateToPage(
       index,
-      duration: fade ? fadeTabDuration : kTabScrollDuration,
+      duration: tabAnimationDurationOf(
+        fade ? fadeTabDuration : kTabScrollDuration,
+        appSetting.tabAnimationSpeed,
+      ),
       curve: fade ? fadeTabCurve : slideTabCurve,
     );
     if (mounted && slide == _slide && _order != null) {

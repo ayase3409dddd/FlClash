@@ -119,6 +119,7 @@
   "project": "프로젝트",
   "core": "코어",
   "tabAnimation": "탭 애니메이션",
+  "tabAnimationSpeed": "애니메이션 속도",
   "desc": "ClashMeta 기반의 멀티 플랫폼 프록시 클라이언트로, 간편하게 사용할 수 있으며 오픈 소스이고 광고가 없습니다.",
   "startVpn": "VPN 시작 중…",
   "stopVpn": "VPN 중지 중…",

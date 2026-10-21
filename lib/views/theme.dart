@@ -710,6 +710,96 @@ class _NavigationBarItem extends ConsumerWidget {
   }
 }
 
+class _ThemeSliderCard extends StatelessWidget {
+  const _ThemeSliderCard({
+    required this.label,
+    required this.valueLabel,
+    required this.sliderKey,
+    required this.min,
+    required this.max,
+    required this.value,
+    this.divisions,
+    required this.onChanged,
+    required this.onChangeEnd,
+  });
+
+  final String label;
+  final String valueLabel;
+  final Key sliderKey;
+  final double min;
+  final double max;
+  final double value;
+  final int? divisions;
+  final ValueChanged<double> onChanged;
+  final ValueChanged<double> onChangeEnd;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final level = context.raisedSurfaceLevel;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+        decoration: ShapeDecoration(
+          color: level.colorOf(colorScheme),
+          shape: AppShape.lg,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: true)
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: level.next.colorOf(colorScheme),
+                    shape: AppShape.full,
+                  ),
+                  child: Text(
+                    valueLabel,
+                    style: AppTextStyle.subheadline
+                        .of(context, emphasized: true)
+                        .toTabular
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ],
+            ),
+            MediaQuery.withNoTextScaling(
+              child: SliderTheme(
+                data: SliderDefaultsM3(context),
+                child: Slider(
+                  key: sliderKey,
+                  padding: EdgeInsets.zero,
+                  min: min,
+                  max: max,
+                  divisions: divisions,
+                  value: value,
+                  label: valueLabel,
+                  onChanged: onChanged,
+                  onChangeEnd: onChangeEnd,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _NavigationBarBottomMarginItem extends ConsumerStatefulWidget {
   const _NavigationBarBottomMarginItem();
 
@@ -733,9 +823,6 @@ class _NavigationBarBottomMarginItemState
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = context.appLocalizations;
-    final colorScheme = context.colorScheme;
-    final level = context.raisedSurfaceLevel;
     final viewHeight = MediaQuery.sizeOf(context).height;
     final maxMargin = viewHeight * 0.3;
     final defaultMargin = max(
@@ -750,65 +837,56 @@ class _NavigationBarBottomMarginItemState
     final value = (_draft ?? stored ?? defaultMargin)
         .clamp(0.0, maxMargin)
         .toDouble();
-    final percent = '${(value / viewHeight * 100).round()}%';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
-        decoration: ShapeDecoration(
-          color: level.colorOf(colorScheme),
-          shape: AppShape.lg,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    appLocalizations.navigationBarBottomMargin,
-                    style: AppTextStyle.subheadline
-                        .of(context, emphasized: true)
-                        .copyWith(color: colorScheme.onSurfaceVariant),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: level.next.colorOf(colorScheme),
-                    shape: AppShape.full,
-                  ),
-                  child: Text(
-                    percent,
-                    style: AppTextStyle.subheadline
-                        .of(context, emphasized: true)
-                        .toTabular
-                        .copyWith(color: colorScheme.onSurfaceVariant),
-                  ),
-                ),
-              ],
-            ),
-            MediaQuery.withNoTextScaling(
-              child: SliderTheme(
-                data: SliderDefaultsM3(context),
-                child: Slider(
-                  key: const ValueKey('navigation-bar-margin-slider'),
-                  padding: EdgeInsets.zero,
-                  min: 0,
-                  max: maxMargin,
-                  value: value,
-                  label: percent,
-                  onChanged: (value) => setState(() => _draft = value),
-                  onChangeEnd: _update,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return _ThemeSliderCard(
+      label: context.appLocalizations.navigationBarBottomMargin,
+      valueLabel: '${(value / viewHeight * 100).round()}%',
+      sliderKey: const ValueKey('navigation-bar-margin-slider'),
+      min: 0,
+      max: maxMargin,
+      value: value,
+      onChanged: (value) => setState(() => _draft = value),
+      onChangeEnd: _update,
+    );
+  }
+}
+
+class _TabAnimationSpeedItem extends ConsumerStatefulWidget {
+  const _TabAnimationSpeedItem();
+
+  @override
+  ConsumerState<_TabAnimationSpeedItem> createState() =>
+      _TabAnimationSpeedItemState();
+}
+
+class _TabAnimationSpeedItemState
+    extends ConsumerState<_TabAnimationSpeedItem> {
+  double? _draft;
+
+  void _update(double value) {
+    setState(() => _draft = null);
+    ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(tabAnimationSpeed: value));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stored = ref.watch(
+      appSettingProvider.select((state) => state.tabAnimationSpeed),
+    );
+    final value = (_draft ?? stored)
+        .clamp(minTabAnimationSpeed, maxTabAnimationSpeed)
+        .toDouble();
+    return _ThemeSliderCard(
+      label: context.appLocalizations.tabAnimationSpeed,
+      valueLabel: '${(value * 100).round()}%',
+      sliderKey: const ValueKey('tab-animation-speed-slider'),
+      min: minTabAnimationSpeed,
+      max: maxTabAnimationSpeed,
+      divisions: 15,
+      value: value,
+      onChanged: (value) => setState(() => _draft = value),
+      onChangeEnd: _update,
     );
   }
 }
@@ -836,26 +914,35 @@ class _TabAnimationItem extends ConsumerWidget {
         tabAnimation: tabAnimation,
       ),
     );
-    return PreviewChoiceGroup<TabAnimation>(
-      info: Info(label: appLocalizations.tabAnimation, glyph: AppGlyphs.motion),
-      value: tabAnimation,
-      choices: [
-        PreviewChoice(
-          value: TabAnimation.slide,
-          label: appLocalizations.slide,
-          pictogram: switching(TabAnimation.slide),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        PreviewChoiceGroup<TabAnimation>(
+          info: Info(
+            label: appLocalizations.tabAnimation,
+            glyph: AppGlyphs.motion,
+          ),
+          value: tabAnimation,
+          choices: [
+            PreviewChoice(
+              value: TabAnimation.slide,
+              label: appLocalizations.slide,
+              pictogram: switching(TabAnimation.slide),
+            ),
+            PreviewChoice(
+              value: TabAnimation.fade,
+              label: appLocalizations.fade,
+              pictogram: switching(TabAnimation.fade),
+            ),
+          ],
+          onChanged: (value) {
+            ref
+                .read(appSettingProvider.notifier)
+                .update((state) => state.copyWith(tabAnimation: value));
+          },
         ),
-        PreviewChoice(
-          value: TabAnimation.fade,
-          label: appLocalizations.fade,
-          pictogram: switching(TabAnimation.fade),
-        ),
+        const _TabAnimationSpeedItem(),
       ],
-      onChanged: (value) {
-        ref
-            .read(appSettingProvider.notifier)
-            .update((state) => state.copyWith(tabAnimation: value));
-      },
     );
   }
 }

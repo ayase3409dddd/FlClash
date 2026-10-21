@@ -925,6 +925,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Animation speed`
+  String get tabAnimationSpeed {
+    return Intl.message(
+      'Animation speed',
+      name: 'tabAnimationSpeed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `A multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free.`
   String get desc {
     return Intl.message(

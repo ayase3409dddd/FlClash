@@ -236,6 +236,7 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(TabAnimation.slide)
     @JsonKey(readValue: _readTabAnimation)
     TabAnimation tabAnimation,
+    @Default(1.0) double tabAnimationSpeed,
     @Default(true) bool floatingNavigationBar,
 
     /// Shows the page action as a circle past the floating bar.

@@ -119,6 +119,7 @@
   "project": "Projet",
   "core": "Cœur",
   "tabAnimation": "Animation des onglets",
+  "tabAnimationSpeed": "Vitesse d'animation",
   "desc": "Un client proxy multiplateforme basé sur ClashMeta, simple d’utilisation, open source et sans publicité.",
   "startVpn": "Démarrage du VPN…",
   "stopVpn": "Arrêt du VPN…",

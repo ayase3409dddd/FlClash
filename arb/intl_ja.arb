@@ -119,6 +119,7 @@
   "project": "プロジェクト",
   "core": "コア",
   "tabAnimation": "タブアニメーション",
+  "tabAnimationSpeed": "アニメーション速度",
   "desc": "ClashMetaベースのマルチプラットフォーム対応プロキシクライアント。シンプルで使いやすく、オープンソースで広告もありません。",
   "startVpn": "VPNを起動しています…",
   "stopVpn": "VPNを停止しています…",

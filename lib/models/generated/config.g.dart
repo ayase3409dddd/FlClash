@@ -36,6 +36,7 @@ _AppSettingProps _$AppSettingPropsFromJson(
         _readTabAnimation(json, 'tabAnimation'),
       ) ??
       TabAnimation.slide,
+  tabAnimationSpeed: (json['tabAnimationSpeed'] as num?)?.toDouble() ?? 1.0,
   floatingNavigationBar: json['floatingNavigationBar'] as bool? ?? true,
   floatingNavigationBarQuickAction:
       json['floatingNavigationBarQuickAction'] as bool? ?? true,
@@ -107,6 +108,7 @@ Map<String, dynamic> _$AppSettingPropsToJson(
   'closeConnections': instance.closeConnections,
   'testUrl': instance.testUrl,
   'tabAnimation': _$TabAnimationEnumMap[instance.tabAnimation]!,
+  'tabAnimationSpeed': instance.tabAnimationSpeed,
   'floatingNavigationBar': instance.floatingNavigationBar,
   'floatingNavigationBarQuickAction': instance.floatingNavigationBarQuickAction,
   'floatingNavigationBarBottomMargin':
