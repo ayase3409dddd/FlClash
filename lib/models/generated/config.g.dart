@@ -40,8 +40,19 @@ _AppSettingProps _$AppSettingPropsFromJson(
   floatingNavigationBar: json['floatingNavigationBar'] as bool? ?? true,
   floatingNavigationBarQuickAction:
       json['floatingNavigationBarQuickAction'] as bool? ?? true,
+  quickActionPosition:
+      $enumDecodeNullable(
+        _$QuickActionPositionEnumMap,
+        json['quickActionPosition'],
+      ) ??
+      QuickActionPosition.right,
   floatingNavigationBarBottomMargin:
       (json['floatingNavigationBarBottomMargin'] as num?)?.toDouble(),
+  backgroundEnabled: json['backgroundEnabled'] as bool? ?? false,
+  backgroundImagePath: json['backgroundImagePath'] as String?,
+  backgroundBrightness:
+      (json['backgroundBrightness'] as num?)?.toDouble() ?? 0.35,
+  backgroundBlur: (json['backgroundBlur'] as num?)?.toDouble() ?? 0.0,
   autoCheckUpdate: json['autoCheckUpdate'] as bool? ?? true,
   sidebarExpanded:
       _readSidebarExpanded(json, 'sidebarExpanded') as bool? ?? true,
@@ -50,6 +61,7 @@ _AppSettingProps _$AppSettingPropsFromJson(
   minimizeOnExit: json['minimizeOnExit'] as bool? ?? true,
   hidden: json['hidden'] as bool? ?? false,
   developerMode: json['developerMode'] as bool? ?? false,
+  catgirlMode: json['catgirlMode'] as bool? ?? false,
   restoreStrategy:
       $enumDecodeNullable(_$RestoreStrategyEnumMap, json['restoreStrategy']) ??
       RestoreStrategy.compatible,
@@ -111,14 +123,21 @@ Map<String, dynamic> _$AppSettingPropsToJson(
   'tabAnimationSpeed': instance.tabAnimationSpeed,
   'floatingNavigationBar': instance.floatingNavigationBar,
   'floatingNavigationBarQuickAction': instance.floatingNavigationBarQuickAction,
+  'quickActionPosition':
+      _$QuickActionPositionEnumMap[instance.quickActionPosition]!,
   'floatingNavigationBarBottomMargin':
       instance.floatingNavigationBarBottomMargin,
+  'backgroundEnabled': instance.backgroundEnabled,
+  'backgroundImagePath': instance.backgroundImagePath,
+  'backgroundBrightness': instance.backgroundBrightness,
+  'backgroundBlur': instance.backgroundBlur,
   'autoCheckUpdate': instance.autoCheckUpdate,
   'sidebarExpanded': instance.sidebarExpanded,
   'acceptedDisclaimerVersion': instance.acceptedDisclaimerVersion,
   'minimizeOnExit': instance.minimizeOnExit,
   'hidden': instance.hidden,
   'developerMode': instance.developerMode,
+  'catgirlMode': instance.catgirlMode,
   'restoreStrategy': _$RestoreStrategyEnumMap[instance.restoreStrategy]!,
   'showTrayTitle': instance.showTrayTitle,
   'checkCertificate': instance.checkCertificate,
@@ -135,6 +154,13 @@ Map<String, dynamic> _$AppSettingPropsToJson(
 const _$TabAnimationEnumMap = {
   TabAnimation.slide: 'slide',
   TabAnimation.fade: 'fade',
+};
+
+const _$QuickActionPositionEnumMap = {
+  QuickActionPosition.left: 'left',
+  QuickActionPosition.right: 'right',
+  QuickActionPosition.topLeft: 'topLeft',
+  QuickActionPosition.topRight: 'topRight',
 };
 
 const _$RestoreStrategyEnumMap = {

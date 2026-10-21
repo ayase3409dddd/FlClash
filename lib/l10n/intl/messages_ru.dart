@@ -363,6 +363,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Интервал автообновления",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Назад"),
+    "background": MessageLookupByLibrary.simpleMessage("Фон"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage("Размытие фона"),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "Помещает изображение за интерфейсом; яркость и размытие сохраняют читаемость.",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Включено"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage(
+      "Фоновое изображение",
+    ),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage(
+      "Выбрать изображение",
+    ),
     "backup": MessageLookupByLibrary.simpleMessage("Резервное копирование"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
       "Резервное копирование и восстановление",
@@ -429,6 +441,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("Снять выделение"),
     "cannotSave": MessageLookupByLibrary.simpleMessage("Не удалось сохранить"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("Режим кошкодевочки"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "Переписывает тексты интерфейса (включая примечания) в стиле кошкодевочки. Только каомодзи, без эмодзи.",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "Не удалось переключить прокси; восстановлен предыдущий выбор",
     ),
@@ -1437,6 +1453,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "quickActionButton": MessageLookupByLibrary.simpleMessage(
       "Кнопка быстрого действия",
     ),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "Показывает действие страницы рядом с плавающей панелью.",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage("Слева от панели"),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage(
+      "Положение быстрого действия",
+    ),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "Где находится быстрое действие относительно плавающей панели.",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage(
+      "Справа от панели",
+    ),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage("Слева сверху"),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage(
+      "Справа сверху",
+    ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Быстрые действия"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Быстрое редактирование"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Последние запросы"),
@@ -1843,6 +1876,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimation": MessageLookupByLibrary.simpleMessage("Анимация вкладок"),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage(
       "Скорость анимации",
+    ),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "Скорость анимации переключения вкладок.",
     ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(
       "Нажмите на значок, чтобы повторить",

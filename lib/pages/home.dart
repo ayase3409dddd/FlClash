@@ -179,9 +179,22 @@ class _HomeShell extends ConsumerWidget {
     final barBottomMargin = bottomMargin
         ?.clamp(0.0, MediaQuery.sizeOf(context).height * 0.3)
         .toDouble();
+    final quickActionPosition = ref.watch(
+      appSettingProvider.select((state) => state.quickActionPosition),
+    );
+    final actionPlacement = switch (quickActionPosition) {
+      QuickActionPosition.left => NavigationDockActionPlacement.left,
+      QuickActionPosition.right => NavigationDockActionPlacement.right,
+      QuickActionPosition.topLeft => NavigationDockActionPlacement.topLeft,
+      QuickActionPosition.topRight => NavigationDockActionPlacement.topRight,
+    };
     final action = isMobile && floating && quickAction
         ? _buildDockAction(context, ref, state.pageLabel)
         : null;
+    final topAction =
+        action != null &&
+        (actionPlacement == NavigationDockActionPlacement.topLeft ||
+            actionPlacement == NavigationDockActionPlacement.topRight);
     return Material(
       color: SurfaceLevel.page.colorOf(context.colorScheme),
       child: Column(
@@ -197,6 +210,10 @@ class _HomeShell extends ConsumerWidget {
                           ? NavigationDock.insetOf(
                               context,
                               bottomMargin: barBottomMargin,
+                              extraHeight: topAction
+                                  ? NavigationDock.heightOf(context) +
+                                        NavigationDock.actionGap
+                                  : 0,
                             )
                           : 0,
                       child: _BodyPadding(isMobile: isMobile, child: child),
@@ -219,6 +236,7 @@ class _HomeShell extends ConsumerWidget {
                             ),
                         ],
                         action: action,
+                        actionPlacement: actionPlacement,
                         bottomMargin: barBottomMargin,
                         selectedIndex: state.currentIndex,
                         onSelected: (index) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:fl_clash/common/background_image.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -12,6 +13,7 @@ import 'package:fl_clash/views/theme_preview.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
 
 class ThemeView extends StatelessWidget {
   const ThemeView({super.key});
@@ -31,6 +33,8 @@ class ThemeView extends StatelessWidget {
           _PureBlackItem(),
           SizedBox(height: 16),
           _PrimaryColorItem(),
+          SizedBox(height: 16),
+          _BackgroundItem(),
           SizedBox(height: 16),
           _NavigationBarItem(),
           SizedBox(height: 16),
@@ -637,6 +641,9 @@ class _NavigationBarItem extends ConsumerWidget {
         (state) => state.floatingNavigationBarQuickAction,
       ),
     );
+    final quickActionPosition = ref.watch(
+      appSettingProvider.select((state) => state.quickActionPosition),
+    );
     final colorScheme = context.colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -683,13 +690,10 @@ class _NavigationBarItem extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: generateSection(
               items: [
-                ListItem<bool>.options(
+                ListItem.toggle(
                   title: Text(appLocalizations.quickActionButton),
-                  options: const [true, false],
+                  subtitle: Text(appLocalizations.quickActionButtonDesc),
                   value: quickAction,
-                  textBuilder: (value) => value
-                      ? appLocalizations.turnOn
-                      : appLocalizations.turnOff,
                   onChanged: (value) {
                     ref
                         .read(appSettingProvider.notifier)
@@ -700,6 +704,31 @@ class _NavigationBarItem extends ConsumerWidget {
                         );
                   },
                 ),
+                if (quickAction)
+                  ListItem<QuickActionPosition>.options(
+                    title: Text(appLocalizations.quickActionPosition),
+                    subtitle: Text(appLocalizations.quickActionPositionDesc),
+                    options: QuickActionPosition.values,
+                    value: quickActionPosition,
+                    textBuilder: (position) => switch (position) {
+                      QuickActionPosition.left =>
+                        appLocalizations.quickActionLeft,
+                      QuickActionPosition.right =>
+                        appLocalizations.quickActionRight,
+                      QuickActionPosition.topLeft =>
+                        appLocalizations.quickActionTopLeft,
+                      QuickActionPosition.topRight =>
+                        appLocalizations.quickActionTopRight,
+                    },
+                    onChanged: (value) {
+                      ref
+                          .read(appSettingProvider.notifier)
+                          .update(
+                            (state) =>
+                                state.copyWith(quickActionPosition: value),
+                          );
+                    },
+                  ),
               ],
             ),
           ),
@@ -719,6 +748,7 @@ class _ThemeSliderCard extends StatelessWidget {
     required this.max,
     required this.value,
     this.divisions,
+    this.description,
     required this.onChanged,
     required this.onChangeEnd,
   });
@@ -730,6 +760,7 @@ class _ThemeSliderCard extends StatelessWidget {
   final double max;
   final double value;
   final int? divisions;
+  final String? description;
   final ValueChanged<double> onChanged;
   final ValueChanged<double> onChangeEnd;
 
@@ -777,6 +808,16 @@ class _ThemeSliderCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (description case final description?)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  description,
+                  style: AppTextStyle.caption1
+                      .of(context)
+                      .copyWith(color: colorScheme.onSurfaceVariant),
+                ),
+              ),
             MediaQuery.withNoTextScaling(
               child: SliderTheme(
                 data: SliderDefaultsM3(context),
@@ -879,11 +920,194 @@ class _TabAnimationSpeedItemState
         .toDouble();
     return _ThemeSliderCard(
       label: context.appLocalizations.tabAnimationSpeed,
+      description: context.appLocalizations.tabAnimationSpeedDesc,
       valueLabel: '${(value * 100).round()}%',
       sliderKey: const ValueKey('tab-animation-speed-slider'),
       min: minTabAnimationSpeed,
       max: maxTabAnimationSpeed,
       divisions: 15,
+      value: value,
+      onChanged: (value) => setState(() => _draft = value),
+      onChangeEnd: _update,
+    );
+  }
+}
+
+class _BackgroundItem extends ConsumerWidget {
+  const _BackgroundItem();
+
+  Future<void> _pick(BuildContext context, WidgetRef ref) async {
+    final appLocalizations = context.appLocalizations;
+    final notifier = ref.read(appSettingProvider.notifier);
+    final oldPath = ref.read(appSettingProvider).backgroundImagePath;
+    try {
+      final path = await pickBackgroundImage();
+      if (path == null) {
+        return;
+      }
+      await deleteBackgroundImage(oldPath);
+      notifier.update(
+        (state) =>
+            state.copyWith(backgroundEnabled: true, backgroundImagePath: path),
+      );
+    } catch (error) {
+      if (!context.mounted) {
+        return;
+      }
+      context.showNotifier(
+        userFacingErrorMessage(error, appLocalizations),
+        level: MessageLevel.error,
+      );
+    }
+  }
+
+  Future<void> _remove(WidgetRef ref) async {
+    final notifier = ref.read(appSettingProvider.notifier);
+    final path = ref.read(appSettingProvider).backgroundImagePath;
+    try {
+      await deleteBackgroundImage(path);
+    } catch (error) {
+      commonPrint.log(
+        'delete background image: $error',
+        logLevel: LogLevel.warning,
+      );
+    }
+    notifier.update((state) => state.copyWith(backgroundImagePath: null));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final enabled = ref.watch(
+      appSettingProvider.select((state) => state.backgroundEnabled),
+    );
+    final path = ref.watch(
+      appSettingProvider.select((state) => state.backgroundImagePath),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InfoHeader(
+          info: Info(
+            label: appLocalizations.background,
+            glyph: AppGlyphs.photos,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: generateSection(
+            items: [
+              ListItem.toggle(
+                title: Text(appLocalizations.backgroundEnabled),
+                subtitle: Text(appLocalizations.backgroundDesc),
+                value: enabled,
+                onChanged: (value) {
+                  ref
+                      .read(appSettingProvider.notifier)
+                      .update(
+                        (state) => state.copyWith(backgroundEnabled: value),
+                      );
+                },
+              ),
+              if (enabled)
+                ListItem(
+                  title: Text(appLocalizations.backgroundImage),
+                  subtitle: Text(
+                    path == null ? appLocalizations.none : p.basename(path),
+                  ),
+                  trailing: const GlyphIcon(AppGlyphs.photos),
+                  onTap: () => _pick(context, ref),
+                ),
+              if (enabled && path != null)
+                ListItem(
+                  leading: const GlyphIcon(AppGlyphs.delete),
+                  title: Text(appLocalizations.remove),
+                  onTap: () => _remove(ref),
+                ),
+            ],
+          ),
+        ),
+        if (enabled) ...[
+          const _BackgroundBrightnessItem(),
+          const _BackgroundBlurItem(),
+        ],
+      ],
+    );
+  }
+}
+
+class _BackgroundBrightnessItem extends ConsumerStatefulWidget {
+  const _BackgroundBrightnessItem();
+
+  @override
+  ConsumerState<_BackgroundBrightnessItem> createState() =>
+      _BackgroundBrightnessItemState();
+}
+
+class _BackgroundBrightnessItemState
+    extends ConsumerState<_BackgroundBrightnessItem> {
+  double? _draft;
+
+  void _update(double value) {
+    setState(() => _draft = null);
+    ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(backgroundBrightness: value));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stored = ref.watch(
+      appSettingProvider.select((state) => state.backgroundBrightness),
+    );
+    final value = (_draft ?? stored).clamp(0.0, 1.0).toDouble();
+    return _ThemeSliderCard(
+      label: context.appLocalizations.brightness,
+      valueLabel: '${(value * 100).round()}%',
+      sliderKey: const ValueKey('background-brightness-slider'),
+      min: 0,
+      max: 1,
+      divisions: 20,
+      value: value,
+      onChanged: (value) => setState(() => _draft = value),
+      onChangeEnd: _update,
+    );
+  }
+}
+
+class _BackgroundBlurItem extends ConsumerStatefulWidget {
+  const _BackgroundBlurItem();
+
+  @override
+  ConsumerState<_BackgroundBlurItem> createState() =>
+      _BackgroundBlurItemState();
+}
+
+class _BackgroundBlurItemState extends ConsumerState<_BackgroundBlurItem> {
+  static const _maxBlur = 30.0;
+
+  double? _draft;
+
+  void _update(double value) {
+    setState(() => _draft = null);
+    ref
+        .read(appSettingProvider.notifier)
+        .update((state) => state.copyWith(backgroundBlur: value));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stored = ref.watch(
+      appSettingProvider.select((state) => state.backgroundBlur),
+    );
+    final value = (_draft ?? stored).clamp(0.0, _maxBlur).toDouble();
+    return _ThemeSliderCard(
+      label: context.appLocalizations.backgroundBlur,
+      valueLabel: '${(value / _maxBlur * 100).round()}%',
+      sliderKey: const ValueKey('background-blur-slider'),
+      min: 0,
+      max: _maxBlur,
+      divisions: 30,
       value: value,
       onChanged: (value) => setState(() => _draft = value),
       onChangeEnd: _update,

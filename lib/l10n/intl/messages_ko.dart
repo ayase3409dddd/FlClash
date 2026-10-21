@@ -296,6 +296,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoUpdate": MessageLookupByLibrary.simpleMessage("자동 업데이트"),
     "autoUpdateInterval": MessageLookupByLibrary.simpleMessage("자동 업데이트 간격"),
     "back": MessageLookupByLibrary.simpleMessage("뒤로"),
+    "background": MessageLookupByLibrary.simpleMessage("배경"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage("배경 흐림"),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "인터페이스 뒤에 사진을 표시합니다. 밝기와 흐림으로 가독성을 유지합니다.",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("사용"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage("배경 이미지"),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage("이미지 선택"),
     "backup": MessageLookupByLibrary.simpleMessage("백업"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("백업 및 복원"),
     "backupFromNewerVersion": MessageLookupByLibrary.simpleMessage(
@@ -346,6 +354,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("취소"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("모두 선택 해제"),
     "cannotSave": MessageLookupByLibrary.simpleMessage("저장할 수 없음"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("냥냥 모드"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "인터페이스 문구(주석 포함)를 냥냥 스타일로 바꿉니다. 얼굴문자만 사용하고 이모지는 쓰지 않습니다.",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "프록시를 전환하지 못해 이전 선택을 복원했습니다",
     ),
@@ -1159,6 +1171,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "qrcode": MessageLookupByLibrary.simpleMessage("QR 코드"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage("QR 코드를 스캔하여 프로필 가져오기"),
     "quickActionButton": MessageLookupByLibrary.simpleMessage("빠른 작업 버튼"),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "플로팅 바 옆에 페이지 동작을 표시합니다.",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage("바 왼쪽"),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage("빠른 작업 위치"),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "플로팅 바 주변의 빠른 작업 위치.",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage("바 오른쪽"),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage("왼쪽 위"),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage("오른쪽 위"),
     "quickActions": MessageLookupByLibrary.simpleMessage("빠른 작업"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("빠른 편집"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("최근 요청"),
@@ -1480,6 +1503,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab": MessageLookupByLibrary.simpleMessage("탭"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("탭 애니메이션"),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage("애니메이션 속도"),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "탭 전환 애니메이션 속도.",
+    ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("아이콘을 눌러 다시 시도"),
     "tapToAuthorize": MessageLookupByLibrary.simpleMessage("눌러서 허용"),
     "target": MessageLookupByLibrary.simpleMessage("대상"),

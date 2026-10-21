@@ -1,3 +1,4 @@
+import 'package:fl_clash/common/catgirl_localizations.dart';
 import 'package:fl_clash/common/constant.dart';
 import 'package:fl_clash/common/exception.dart';
 import 'package:fl_clash/common/network_error.dart';
@@ -7,7 +8,10 @@ import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/ui/l10n.dart';
 import 'package:flutter/widgets.dart';
 
-final currentAppLocalizations = AppLocalizations.current;
+/// The localizations the app reads outside a widget tree. It follows the
+/// catgirl setting too, so dialogs and errors match the interface.
+AppLocalizations get currentAppLocalizations =>
+    catgirlAppLocalizationsOf(AppLocalizations.current);
 
 class AppUiLocalizations implements UiLocalizations {
   const AppUiLocalizations(this._localizations);
@@ -69,8 +73,9 @@ class _AppUiLocalizationsDelegate
       AppLocalizations.delegate.isSupported(locale);
 
   @override
-  Future<UiLocalizations> load(Locale locale) =>
-      AppLocalizations.load(locale).then(AppUiLocalizations.new);
+  Future<UiLocalizations> load(Locale locale) => AppLocalizations.load(
+    locale,
+  ).then(catgirlAppLocalizationsOf).then(AppUiLocalizations.new);
 
   @override
   bool shouldReload(_AppUiLocalizationsDelegate old) => false;

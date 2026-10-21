@@ -242,9 +242,20 @@ abstract class AppSettingProps with _$AppSettingProps {
     /// Shows the page action as a circle past the floating bar.
     @Default(true) bool floatingNavigationBarQuickAction,
 
+    /// Where that circle sits around the floating bar.
+    @Default(QuickActionPosition.right) QuickActionPosition quickActionPosition,
+
     /// The floating bar's gap to the bottom edge, in logical pixels. Null
     /// keeps the bar clear of the system inset instead of an explicit value.
     double? floatingNavigationBarBottomMargin,
+    @Default(false) bool backgroundEnabled,
+    String? backgroundImagePath,
+
+    /// Dims the background picture, 0 to 1.
+    @Default(0.35) double backgroundBrightness,
+
+    /// Blurs the background picture, in logical pixels.
+    @Default(0.0) double backgroundBlur,
     @Default(true) bool autoCheckUpdate,
     @Default(true)
     @JsonKey(readValue: _readSidebarExpanded)
@@ -253,6 +264,7 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(true) bool minimizeOnExit,
     @Default(false) bool hidden,
     @Default(false) bool developerMode,
+    @Default(false) bool catgirlMode,
     @Default(RestoreStrategy.compatible) RestoreStrategy restoreStrategy,
     @Default(true) bool showTrayTitle,
     @Default(true) bool checkCertificate,

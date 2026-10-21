@@ -323,6 +323,45 @@ void main() {
     );
   });
 
+  testWidgets('the quick action sits where its position setting says', (
+    tester,
+  ) async {
+    final container = await _pumpHome(tester);
+    final bar = tester.getRect(find.byType(FloatingNavigationBar));
+    final action = tester.getRect(_dockAction('Start'));
+    expect(action.left, greaterThan(bar.right));
+
+    container
+        .read(appSettingProvider.notifier)
+        .update(
+          (state) =>
+              state.copyWith(quickActionPosition: QuickActionPosition.left),
+        );
+    await tester.pumpAndSettle();
+    final leftBar = tester.getRect(find.byType(FloatingNavigationBar));
+    final leftAction = tester.getRect(_dockAction('Start'));
+    expect(leftAction.right, lessThan(leftBar.left));
+    expect(leftAction.center.dy, moreOrLessEquals(leftBar.center.dy));
+
+    for (final position in [
+      QuickActionPosition.topLeft,
+      QuickActionPosition.topRight,
+    ]) {
+      container
+          .read(appSettingProvider.notifier)
+          .update((state) => state.copyWith(quickActionPosition: position));
+      await tester.pumpAndSettle();
+      final topBar = tester.getRect(find.byType(FloatingNavigationBar));
+      final topAction = tester.getRect(_dockAction('Start'));
+      expect(topAction.bottom, lessThan(topBar.top));
+      if (position == QuickActionPosition.topLeft) {
+        expect(topAction.left, moreOrLessEquals(topBar.left));
+      } else {
+        expect(topAction.right, moreOrLessEquals(topBar.right));
+      }
+    }
+  });
+
   testWidgets('the dock action presses, and stays quiet when disabled', (
     tester,
   ) async {

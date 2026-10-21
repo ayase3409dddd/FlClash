@@ -31,13 +31,13 @@ void main() {
       overrides: [profilesProvider.overrideWith(TestProfiles.new)],
     );
     globalState.container = container;
-    container.read(viewSizeProvider.notifier).value = const Size(1400, 2400);
+    container.read(viewSizeProvider.notifier).value = const Size(1400, 3200);
   });
 
   tearDown(() => container.dispose());
 
   Future<void> pumpThemeView(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(1400, 2400);
+    tester.view.physicalSize = const Size(1400, 3200);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -341,15 +341,24 @@ void main() {
 
       await tester.tap(find.text('Quick action button'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Turn off').last);
-      await tester.pumpAndSettle();
       expect(readSetting().floatingNavigationBarQuickAction, isFalse);
 
       await tester.tap(find.text('Quick action button'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Turn on').last);
-      await tester.pumpAndSettle();
       expect(readSetting().floatingNavigationBarQuickAction, isTrue);
+    });
+
+    testWidgets('sets where the quick action sits', (tester) async {
+      await pumpThemeView(tester);
+
+      expect(readSetting().quickActionPosition, QuickActionPosition.right);
+      expect(find.text('Quick action position'), findsOneWidget);
+
+      await tester.tap(find.text('Quick action position'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Above left').last);
+      await tester.pumpAndSettle();
+      expect(readSetting().quickActionPosition, QuickActionPosition.topLeft);
     });
 
     testWidgets('sets the floating bar distance from the bottom', (
@@ -416,6 +425,43 @@ void main() {
         await tester.pumpAndSettle();
         expect(selected(), destination);
       }
+    });
+  });
+
+  group('background', () {
+    testWidgets('toggles the background and exposes its controls', (
+      tester,
+    ) async {
+      await pumpThemeView(tester);
+      AppSettingProps readSetting() => container.read(appSettingProvider);
+
+      expect(readSetting().backgroundEnabled, isFalse);
+      expect(find.text('Enabled'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('background-brightness-slider')),
+        findsNothing,
+      );
+
+      await tester.tap(find.text('Enabled'));
+      await tester.pumpAndSettle();
+      expect(readSetting().backgroundEnabled, isTrue);
+
+      expect(find.text('Background image'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('background-brightness-slider')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('background-blur-slider')),
+        findsOneWidget,
+      );
+
+      await tester.drag(
+        find.byKey(const ValueKey('background-brightness-slider')),
+        const Offset(120, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(readSetting().backgroundBrightness, greaterThan(0.35));
     });
   });
 

@@ -478,6 +478,17 @@ class GeneralView extends ConsumerWidget {
             items: _logItems(),
             footer: appLocalizations.logcatDesc,
           ),
+          generateSection(
+            title: appLocalizations.catgirlMode,
+            items: [
+              _appSettingToggle(
+                title: (l) => l.catgirlMode,
+                select: (state) => state.catgirlMode,
+                update: (state, value) => state.copyWith(catgirlMode: value),
+              ),
+            ],
+            footer: appLocalizations.catgirlModeDesc,
+          ),
         ],
       ),
     );

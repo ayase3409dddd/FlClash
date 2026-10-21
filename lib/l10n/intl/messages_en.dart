@@ -352,6 +352,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Auto-update interval",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Back"),
+    "background": MessageLookupByLibrary.simpleMessage("Background"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage("Background blur"),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "Puts a picture behind the interface; brightness and blur keep the text readable.",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Enabled"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage("Background image"),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage("Choose image"),
     "backup": MessageLookupByLibrary.simpleMessage("Backup"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
       "Backup and restore",
@@ -412,6 +420,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("Deselect all"),
     "cannotSave": MessageLookupByLibrary.simpleMessage("Can\'t save"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("Catgirl mode"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "Rewrites interface copy, notes included, in a catgirl style. Kaomoji only, no emoji.",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "Failed to switch proxy; the previous selection has been restored",
     ),
@@ -1376,6 +1388,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "quickActionButton": MessageLookupByLibrary.simpleMessage(
       "Quick action button",
     ),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "Shows the page action next to the floating bar.",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage("Left of bar"),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage(
+      "Quick action position",
+    ),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "Where the quick action sits around the floating bar.",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage("Right of bar"),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage("Above left"),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage("Above right"),
     "quickActions": MessageLookupByLibrary.simpleMessage("Quick actions"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Quick edit"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Recent requests"),
@@ -1760,6 +1785,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tabAnimation": MessageLookupByLibrary.simpleMessage("Tab animation"),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage(
       "Animation speed",
+    ),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "How fast tab switches play.",
     ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(
       "Tap the icon to retry",

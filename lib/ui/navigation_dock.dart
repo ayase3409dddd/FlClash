@@ -421,6 +421,9 @@ class NavigationDockAction {
   final bool loading;
 }
 
+/// Where the dock's action sits around the bar.
+enum NavigationDockActionPlacement { left, right, topLeft, topRight }
+
 class NavigationDock extends StatelessWidget {
   const NavigationDock({
     super.key,
@@ -428,6 +431,7 @@ class NavigationDock extends StatelessWidget {
     required this.selectedIndex,
     required this.onSelected,
     this.action,
+    this.actionPlacement = NavigationDockActionPlacement.right,
     this.bottomMargin,
   });
 
@@ -438,12 +442,18 @@ class NavigationDock extends StatelessWidget {
   /// The current page's action, shown as a circle past the bar.
   final NavigationDockAction? action;
 
+  /// Where [action] sits around the bar.
+  final NavigationDockActionPlacement actionPlacement;
+
   /// The bar's gap to the bottom edge; null keeps it clear of the system
   /// inset.
   final double? bottomMargin;
 
   /// The gap the bar keeps when no explicit bottom margin is set.
   static const double minimumBottomMargin = _edgeMargin;
+
+  /// The gap between the bar and its action.
+  static const double actionGap = _actionGap;
 
   static double heightOf(BuildContext context) {
     return _barHeight +
@@ -455,14 +465,94 @@ class NavigationDock extends StatelessWidget {
       bottomMargin ??
       math.max(minimumBottomMargin, MediaQuery.paddingOf(context).bottom);
 
+  static bool _isTop(NavigationDockActionPlacement placement) =>
+      placement == NavigationDockActionPlacement.topLeft ||
+      placement == NavigationDockActionPlacement.topRight;
+
   /// The room content scrolling under the dock leaves at its foot.
-  static double insetOf(BuildContext context, {double? bottomMargin}) =>
-      heightOf(context) + _bottomMarginOf(context, bottomMargin);
+  static double insetOf(
+    BuildContext context, {
+    double? bottomMargin,
+    double extraHeight = 0,
+  }) =>
+      heightOf(context) + extraHeight + _bottomMarginOf(context, bottomMargin);
 
   @override
   Widget build(BuildContext context) {
     final height = heightOf(context);
     final margin = _bottomMarginOf(context, bottomMargin);
+    final action = this.action;
+    final topAction = action != null && _isTop(actionPlacement);
+    final content = LayoutBuilder(
+      builder: (_, constraints) {
+        final actionSpan = action == null || topAction
+            ? 0.0
+            : height + _actionGap;
+        final maxBarWidth = destinations.length >= _fullWidthCount
+            ? double.infinity
+            : destinations.length * _maxItemExtent + _barPadding * 4;
+        final barWidth = math.max(
+          0.0,
+          math.min(constraints.maxWidth - actionSpan, maxBarWidth),
+        );
+        final bar = _HitSlop(
+          child: SizedBox(
+            width: barWidth,
+            height: height,
+            child: FloatingNavigationBar(
+              destinations: destinations,
+              selectedIndex: selectedIndex,
+              onSelected: onSelected,
+            ),
+          ),
+        );
+        final button = action == null
+            ? null
+            : SizedBox.square(
+                dimension: height,
+                child: _DockActionButton(action: action, diameter: height),
+              );
+        if (topAction) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: barWidth,
+                  height: height,
+                  child: Align(
+                    alignment:
+                        actionPlacement == NavigationDockActionPlacement.topLeft
+                        ? AlignmentDirectional.centerStart
+                        : AlignmentDirectional.centerEnd,
+                    child: button,
+                  ),
+                ),
+                const SizedBox(height: _actionGap),
+                bar,
+              ],
+            ),
+          );
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (actionPlacement == NavigationDockActionPlacement.left &&
+                button != null) ...[
+              button,
+              const SizedBox(width: _actionGap),
+            ],
+            bar,
+            if (actionPlacement == NavigationDockActionPlacement.right &&
+                button != null) ...[
+              const SizedBox(width: _actionGap),
+              button,
+            ],
+          ],
+        );
+      },
+    );
     final dock = Padding(
       padding: EdgeInsets.fromLTRB(
         _edgeMargin,
@@ -470,48 +560,14 @@ class NavigationDock extends StatelessWidget {
         _edgeMargin,
         margin,
       ),
-      child: _HitSlop(
-        child: SizedBox(
-          height: height,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Flexible(
-                child: _HitSlop(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: destinations.length >= _fullWidthCount
-                          ? double.infinity
-                          : destinations.length * _maxItemExtent +
-                                _barPadding * 4,
-                    ),
-                    child: FloatingNavigationBar(
-                      destinations: destinations,
-                      selectedIndex: selectedIndex,
-                      onSelected: onSelected,
-                    ),
-                  ),
-                ),
-              ),
-              if (action case final action?)
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: _actionGap),
-                  child: SizedBox.square(
-                    dimension: height,
-                    child: _DockActionButton(action: action, diameter: height),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+      child: _HitSlop(child: content),
     );
+    final contentHeight = height + (topAction ? height + _actionGap : 0);
     // The bar rebuilds every frame its lens or a press moves; a scope of its
     // own keeps that to the dock (.agents/architecture.md, Rebuild Scopes).
     return SizedBox(
       width: double.infinity,
-      height: _shadowRoom + height + margin,
+      height: _shadowRoom + contentHeight + margin,
       child: RepaintBoundary(child: LayoutBuilder(builder: (_, _) => dock)),
     );
   }

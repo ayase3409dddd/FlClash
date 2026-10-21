@@ -935,6 +935,16 @@ class AppLocalizations {
     );
   }
 
+  /// `How fast tab switches play.`
+  String get tabAnimationSpeedDesc {
+    return Intl.message(
+      'How fast tab switches play.',
+      name: 'tabAnimationSpeedDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `A multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free.`
   String get desc {
     return Intl.message(
@@ -3320,6 +3330,76 @@ class AppLocalizations {
     );
   }
 
+  /// `Shows the page action next to the floating bar.`
+  String get quickActionButtonDesc {
+    return Intl.message(
+      'Shows the page action next to the floating bar.',
+      name: 'quickActionButtonDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Left of bar`
+  String get quickActionLeft {
+    return Intl.message(
+      'Left of bar',
+      name: 'quickActionLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Right of bar`
+  String get quickActionRight {
+    return Intl.message(
+      'Right of bar',
+      name: 'quickActionRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Above left`
+  String get quickActionTopLeft {
+    return Intl.message(
+      'Above left',
+      name: 'quickActionTopLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Above right`
+  String get quickActionTopRight {
+    return Intl.message(
+      'Above right',
+      name: 'quickActionTopRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick action position`
+  String get quickActionPosition {
+    return Intl.message(
+      'Quick action position',
+      name: 'quickActionPosition',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Where the quick action sits around the floating bar.`
+  String get quickActionPositionDesc {
+    return Intl.message(
+      'Where the quick action sits around the floating bar.',
+      name: 'quickActionPositionDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Distance from bottom`
   String get navigationBarBottomMargin {
     return Intl.message(
@@ -3368,6 +3448,61 @@ class AppLocalizations {
   /// `Color style`
   String get colorStyle {
     return Intl.message('Color style', name: 'colorStyle', desc: '', args: []);
+  }
+
+  /// `Background`
+  String get background {
+    return Intl.message('Background', name: 'background', desc: '', args: []);
+  }
+
+  /// `Enabled`
+  String get backgroundEnabled {
+    return Intl.message(
+      'Enabled',
+      name: 'backgroundEnabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Puts a picture behind the interface; brightness and blur keep the text readable.`
+  String get backgroundDesc {
+    return Intl.message(
+      'Puts a picture behind the interface; brightness and blur keep the text readable.',
+      name: 'backgroundDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Background image`
+  String get backgroundImage {
+    return Intl.message(
+      'Background image',
+      name: 'backgroundImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose image`
+  String get backgroundPick {
+    return Intl.message(
+      'Choose image',
+      name: 'backgroundPick',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Background blur`
+  String get backgroundBlur {
+    return Intl.message(
+      'Background blur',
+      name: 'backgroundBlur',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Grid`
@@ -3435,6 +3570,26 @@ class AppLocalizations {
     return Intl.message(
       'Developer mode',
       name: 'developerMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Catgirl mode`
+  String get catgirlMode {
+    return Intl.message(
+      'Catgirl mode',
+      name: 'catgirlMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewrites interface copy, notes included, in a catgirl style. Kaomoji only, no emoji.`
+  String get catgirlModeDesc {
+    return Intl.message(
+      'Rewrites interface copy, notes included, in a catgirl style. Kaomoji only, no emoji.',
+      name: 'catgirlModeDesc',
       desc: '',
       args: [],
     );

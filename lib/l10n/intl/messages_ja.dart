@@ -299,6 +299,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoUpdate": MessageLookupByLibrary.simpleMessage("自動更新"),
     "autoUpdateInterval": MessageLookupByLibrary.simpleMessage("自動更新間隔"),
     "back": MessageLookupByLibrary.simpleMessage("戻る"),
+    "background": MessageLookupByLibrary.simpleMessage("背景"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage("背景のぼかし"),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "インターフェースの背後に画像を表示します。明るさとぼかしで読みやすさを保ちます。",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("有効"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage("背景画像"),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage("画像を選択"),
     "backup": MessageLookupByLibrary.simpleMessage("バックアップ"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("バックアップと復元"),
     "backupFromNewerVersion": MessageLookupByLibrary.simpleMessage(
@@ -355,6 +363,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("すべて選択解除"),
     "cannotSave": MessageLookupByLibrary.simpleMessage("保存できません"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("猫娘モード"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "インターフェースの文言（注釈を含む）を猫娘風にします。顔文字のみで絵文字は使いません。",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "プロキシの切り替えに失敗したため、前回の選択に戻しました",
     ),
@@ -1180,6 +1192,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "QRコードをスキャンしてプロファイルを取得します",
     ),
     "quickActionButton": MessageLookupByLibrary.simpleMessage("クイックアクションボタン"),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "フローティングバーの横にページ操作を表示します。",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage("バーの左"),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage("クイック操作の位置"),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "フローティングバーに対するクイック操作の位置。",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage("バーの右"),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage("左上"),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage("右上"),
     "quickActions": MessageLookupByLibrary.simpleMessage("クイック操作"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("クイック編集"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("最近のリクエスト"),
@@ -1507,6 +1530,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab": MessageLookupByLibrary.simpleMessage("タブ"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("タブアニメーション"),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage("アニメーション速度"),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "タブ切り替えアニメーションの速度。",
+    ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("アイコンをタップして再試行"),
     "tapToAuthorize": MessageLookupByLibrary.simpleMessage("タップして許可"),
     "target": MessageLookupByLibrary.simpleMessage("宛先"),

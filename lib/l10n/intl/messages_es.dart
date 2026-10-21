@@ -375,6 +375,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Intervalo de actualización automática",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Atrás"),
+    "background": MessageLookupByLibrary.simpleMessage("Fondo"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage(
+      "Desenfoque del fondo",
+    ),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "Coloca una imagen detrás de la interfaz; el brillo y el desenfoque mantienen la legibilidad.",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("Activado"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage("Imagen de fondo"),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage("Elegir imagen"),
     "backup": MessageLookupByLibrary.simpleMessage("Copia de seguridad"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage(
       "Copia de seguridad y restauración",
@@ -445,6 +455,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Deseleccionar todo",
     ),
     "cannotSave": MessageLookupByLibrary.simpleMessage("No se puede guardar"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("Modo chica gato"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "Reescribe los textos de la interfaz (incluidas las notas) con estilo de chica gato. Solo kaomojis, sin emoji.",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "No se pudo cambiar de proxy; se ha restaurado la selección anterior",
     ),
@@ -1477,6 +1491,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "quickActionButton": MessageLookupByLibrary.simpleMessage(
       "Botón de acción rápida",
     ),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "Muestra la acción de la página junto a la barra flotante.",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage(
+      "A la izquierda de la barra",
+    ),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage(
+      "Posición de la acción rápida",
+    ),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "Dónde se sitúa la acción rápida alrededor de la barra flotante.",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage(
+      "A la derecha de la barra",
+    ),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage(
+      "Arriba a la izquierda",
+    ),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage(
+      "Arriba a la derecha",
+    ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Acciones rápidas"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Edición rápida"),
     "recentRequests": MessageLookupByLibrary.simpleMessage(
@@ -1893,6 +1928,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage(
       "Velocidad de animación",
+    ),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "Velocidad de la animación de pestañas.",
     ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage(
       "Toca el icono para reintentar",

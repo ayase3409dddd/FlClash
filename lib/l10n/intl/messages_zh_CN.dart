@@ -290,6 +290,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoUpdate": MessageLookupByLibrary.simpleMessage("自动更新"),
     "autoUpdateInterval": MessageLookupByLibrary.simpleMessage("自动更新间隔"),
     "back": MessageLookupByLibrary.simpleMessage("返回"),
+    "background": MessageLookupByLibrary.simpleMessage("背景"),
+    "backgroundBlur": MessageLookupByLibrary.simpleMessage("模糊度"),
+    "backgroundDesc": MessageLookupByLibrary.simpleMessage(
+      "为界面设置背景图片，可调节亮度与模糊度保证可读性。",
+    ),
+    "backgroundEnabled": MessageLookupByLibrary.simpleMessage("启用"),
+    "backgroundImage": MessageLookupByLibrary.simpleMessage("背景图片"),
+    "backgroundPick": MessageLookupByLibrary.simpleMessage("选择图片"),
     "backup": MessageLookupByLibrary.simpleMessage("备份"),
     "backupAndRestore": MessageLookupByLibrary.simpleMessage("备份与恢复"),
     "backupFromNewerVersion": MessageLookupByLibrary.simpleMessage(
@@ -332,6 +340,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("取消"),
     "cancelSelectAll": MessageLookupByLibrary.simpleMessage("取消全选"),
     "cannotSave": MessageLookupByLibrary.simpleMessage("无法保存"),
+    "catgirlMode": MessageLookupByLibrary.simpleMessage("猫娘模式"),
+    "catgirlModeDesc": MessageLookupByLibrary.simpleMessage(
+      "将界面文案（含注释）切换为猫娘风格，仅使用颜文字，不含 emoji。",
+    ),
     "changeProxyFailedTip": MessageLookupByLibrary.simpleMessage(
       "切换代理失败，已恢复上一次的选择",
     ),
@@ -1075,6 +1087,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "qrcode": MessageLookupByLibrary.simpleMessage("二维码"),
     "qrcodeDesc": MessageLookupByLibrary.simpleMessage("扫描二维码获取配置文件"),
     "quickActionButton": MessageLookupByLibrary.simpleMessage("快捷按钮"),
+    "quickActionButtonDesc": MessageLookupByLibrary.simpleMessage(
+      "在悬浮底栏旁显示当前页面的快捷操作按钮。",
+    ),
+    "quickActionLeft": MessageLookupByLibrary.simpleMessage("底栏左方"),
+    "quickActionPosition": MessageLookupByLibrary.simpleMessage("快捷按钮位置"),
+    "quickActionPositionDesc": MessageLookupByLibrary.simpleMessage(
+      "快捷按钮相对悬浮底栏的位置。",
+    ),
+    "quickActionRight": MessageLookupByLibrary.simpleMessage("底栏右方"),
+    "quickActionTopLeft": MessageLookupByLibrary.simpleMessage("底栏左上方"),
+    "quickActionTopRight": MessageLookupByLibrary.simpleMessage("底栏右上方"),
     "quickActions": MessageLookupByLibrary.simpleMessage("快捷操作"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("快速编辑"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("最近请求"),
@@ -1358,6 +1381,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "tab": MessageLookupByLibrary.simpleMessage("标签页"),
     "tabAnimation": MessageLookupByLibrary.simpleMessage("选项卡动画"),
     "tabAnimationSpeed": MessageLookupByLibrary.simpleMessage("动画速度"),
+    "tabAnimationSpeedDesc": MessageLookupByLibrary.simpleMessage(
+      "选项卡切换动画的播放速度。",
+    ),
     "tapIconToRetry": MessageLookupByLibrary.simpleMessage("点击图标重试"),
     "tapToAuthorize": MessageLookupByLibrary.simpleMessage("点击授权"),
     "target": MessageLookupByLibrary.simpleMessage("目标"),
