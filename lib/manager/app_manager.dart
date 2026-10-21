@@ -114,15 +114,35 @@ class AppEnvManager extends ConsumerWidget {
 
   const AppEnvManager({super.key, required this.child});
 
-  String? _bannerMessage({required bool safeMode}) {
+  /// The corner ribbon a build carries, or null for none. Release builds on the
+  /// stable and pre channels are unbannered: the version already tells users
+  /// which channel they installed, and the pre ribbon read as a defect.
+  @visibleForTesting
+  static String? bannerFor({
+    required bool safeMode,
+    required bool isDebug,
+    required String appEnv,
+  }) {
     if (safeMode) {
       return 'SAFE MODE';
     }
-    if (!globalState.isPre) {
+    if (appEnv == 'stable') {
       return null;
     }
-    return kDebugMode ? 'DEBUG' : globalState.appEnv.toUpperCase();
+    if (isDebug) {
+      return 'DEBUG';
+    }
+    if (appEnv == 'pre') {
+      return null;
+    }
+    return appEnv.toUpperCase();
   }
+
+  String? _bannerMessage({required bool safeMode}) => bannerFor(
+    safeMode: safeMode,
+    isDebug: kDebugMode,
+    appEnv: globalState.appEnv,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

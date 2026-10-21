@@ -38,4 +38,46 @@ void main() {
     expect(banner.message, 'SAFE MODE');
     expect(find.byKey(const Key('child')), findsOneWidget);
   });
+
+  testWidgets('a pre channel debug build is bannered debug', (tester) async {
+    final env = globalState.appEnv;
+    globalState.appEnv = 'pre';
+    addTearDown(() => globalState.appEnv = env);
+    await pump(tester, safeMode: false);
+
+    final banner = tester.widget<Banner>(find.byType(Banner));
+    expect(banner.message, 'DEBUG');
+    expect(find.byKey(const Key('child')), findsOneWidget);
+  });
+
+  test('release builds banner only a dev channel', () {
+    expect(
+      AppEnvManager.bannerFor(safeMode: true, isDebug: false, appEnv: 'pre'),
+      'SAFE MODE',
+    );
+    expect(
+      AppEnvManager.bannerFor(safeMode: false, isDebug: true, appEnv: 'pre'),
+      'DEBUG',
+    );
+    expect(
+      AppEnvManager.bannerFor(safeMode: false, isDebug: false, appEnv: 'pre'),
+      isNull,
+    );
+    expect(
+      AppEnvManager.bannerFor(
+        safeMode: false,
+        isDebug: false,
+        appEnv: 'stable',
+      ),
+      isNull,
+    );
+    expect(
+      AppEnvManager.bannerFor(safeMode: false, isDebug: true, appEnv: 'stable'),
+      isNull,
+    );
+    expect(
+      AppEnvManager.bannerFor(safeMode: false, isDebug: false, appEnv: 'dev'),
+      'DEV',
+    );
+  });
 }
